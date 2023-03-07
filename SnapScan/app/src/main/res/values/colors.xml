@@ -11,4 +11,11 @@
     <color name="light_grey">#4169e1</color>
     <color name="light_blue">#ADD8E6</color>
     <color name="purple">#8692f7</color>
+    <color name="raspberryBlush">#d75f56</color>
+    <color name="darkRaspberryBlush">#8e3d39</color>
+    <color name="ComplementaryBlue">#56ced7</color>
+    <color name="ComplementaryBlueLight">#92ebff</color>
+    <color name="ComplementaryRasp">#d07870</color>
+    <color name="AnalogousRed">#ca3b30</color>
+    <color name="AnalogousPink">#d85582</color>
 </resources>
