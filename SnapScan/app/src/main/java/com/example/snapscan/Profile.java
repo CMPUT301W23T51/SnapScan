@@ -2,7 +2,7 @@ package com.example.snapscan;
 
 import java.util.Date;
 
-public class Profile {
+public abstract class Profile {
     private String username, password;
     private String name, description;
     private int qrcodes, points;
@@ -12,6 +12,8 @@ public class Profile {
     public String getName() {
         return name;
     }
+
+    public abstract Boolean isOwner();
 
     public Profile(String username, String password, String name) {
         this.username = username;
