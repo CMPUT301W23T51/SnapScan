@@ -10,31 +10,47 @@
 
     <ImageView
         android:id="@+id/profile_photo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:padding="4dp"
-        android:src="@drawable/default_profile_photo" />
-
+        android:layout_width="87dp"
+        android:layout_height="86dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="611dp"
+        android:layout_toStartOf="@+id/player_name"
+        app:srcCompat="@drawable/default_profile_photo" />
 
     <TextView
         android:id="@+id/player_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profile_photo"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="12dp"
+        android:layout_above="@+id/description"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="180dp"
+        android:layout_marginBottom="13dp"
         android:text="Player 1"
-        android:textColor="@color/white"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="183dp"
+        android:layout_marginBottom="635dp"
+        android:text="Description"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/qrcode_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="112dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="104dp"
         android:layout_toStartOf="@+id/points_count"
         android:text="0"
         android:textColor="@color/white"
@@ -46,8 +62,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="85dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="218dp"
         android:text="0"
         android:textColor="@color/white"
         android:textSize="22sp"
@@ -58,8 +74,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/qrcode_count"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="83dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="74dp"
         android:layout_toStartOf="@+id/points_count"
         android:text="QR Codes"
         android:textColor="@color/white"
@@ -71,98 +87,71 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/points_count"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="67dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="200dp"
         android:text="Points"
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+    <ImageButton
+        android:id="@+id/ranking_button"
+        android:layout_width="66dp"
+        android:layout_height="67dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="62dp"
+        android:layout_marginBottom="535dp"
+        android:background="#E8AAAA"
+        android:contentDescription = "Ranking"
+        app:srcCompat="@drawable/ranking" />
 
     <Button
         android:id="@+id/edit_profile_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/points_count"
-        android:layout_marginTop="133dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="161dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="449dp"
         android:background="#E8AAAA"
-        android:layout_marginStart="13dp"
         android:text="Edit Profile" />
 
     <ListView
-        android:id="@+id/qrcode_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/navigation_bar"
-        android:layout_below="@id/edit_profile_button"
-        android:layout_marginTop="98dp"
-        android:layout_marginBottom="0dp"
-        android:background="#E8AAAA"
-        android:clickable="false"
-        android:divider="@color/black"
-        android:dividerHeight="1dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp" />
+        android:id="@+id/qrcodes_list"
+        android:layout_width="318dp"
+        android:layout_height="335dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="46dp"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="25dp"
+        android:background="#E8AAAA" />
 
     <Button
         android:id="@+id/sort_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/qrcode_list"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-388dp"
-        android:layout_marginEnd="10dp"
-        android:background="#E8AAAA"
-        android:text="Sort by Points" />
-
-    <LinearLayout
-        android:id="@+id/navigation_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/purple_200"
-        android:elevation="8dp"
-        android:orientation="horizontal">
+        android:layout_marginStart="145dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="385dp"
+        android:layout_toEndOf="@+id/delete_button"
+        android:text="Sort" />
 
-        <ImageButton
-            android:id="@+id/btn_notifications"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/notification" />
-
-        <ImageButton
-            android:id="@+id/btn_map"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/map" />
-
-        <ImageButton
-            android:id="@+id/btn_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/qr_scanner" />
-
-        <ImageButton
-            android:id="@+id/btn_ranking"
-            android:layout_width="13dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/ranking" />
-
-        <ImageButton
-            android:id="@+id/btn_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="62dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/profile" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="382dp"
+        android:background="#FF0000"
+        android:text="delete" />
 
 
 </RelativeLayout>
