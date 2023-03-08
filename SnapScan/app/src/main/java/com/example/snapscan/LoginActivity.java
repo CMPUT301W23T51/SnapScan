@@ -1,9 +1,12 @@
 package com.example.snapscan;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceGroup;
 import android.provider.ContactsContract;
@@ -41,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         authentication =FirebaseAuth.getInstance();
 
         Button button_login = findViewById(R.id.Button_login1);
+
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,12 +85,66 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "Your are successfully logged in!", Toast.LENGTH_SHORT).show();
 
+                //instance of user
+                    FirebaseUser firebaseUser = authentication.getCurrentUser();
+
+                    //checking if the user has verified the email
+                    if (firebaseUser.isEmailVerified()){
+                        Toast.makeText(LoginActivity.this, "Your are logged in", Toast.LENGTH_SHORT).show();
+
+
+                    startActivity(new Intent(LoginActivity.this, UserProfileActivity.class));
+                    finish();
+
+                    } else {
+                            firebaseUser.sendEmailVerification();
+                            authentication.signOut();
+                            UserAlertDialog();
+                    }
+
                 }else {
                     Toast.makeText(LoginActivity.this, "Member can't log in", Toast.LENGTH_SHORT).show();
                 }
                 progressBar.setVisibility(View.GONE);
             }
         });
+
+
+    }
+
+    private void UserAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setTitle("Email has not been verified");
+        builder.setMessage("Please verify your email now");
+
+        //setting up command to open email app from our own application
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_APP_EMAIL);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (authentication.getCurrentUser() != null){
+            Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, UserProfileActivity.class));
+
+        }
+        else {
+            Toast.makeText(this, "Need to login!", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

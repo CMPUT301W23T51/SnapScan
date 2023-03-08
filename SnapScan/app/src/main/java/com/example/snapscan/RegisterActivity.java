@@ -197,18 +197,18 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser firebaseUser = authentication.getCurrentUser();
 
                             //Storing the data in real time database
-                            //UserDetails userDetails = new UserDetails(textName,textDob,textGender,textPhone);
+                            UserDetails userDetails = new UserDetails(textName,textDob,textGender,textPhone);
 
                             //sending verification email
                             firebaseUser.sendEmailVerification();
 
-                            /*/Showing User logged in profile
-                            Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
+                            //Showing User logged in profile
+                            Intent intent = new Intent(RegisterActivity.this, UserProfileActivity.class);
                             //Reusing the activity that is instead of using the a new instance intent will be delivered to old activity
                             //clear_task and new_task will clear all the activities from the stack
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivities(intent);
-                            finish();*/
+                            startActivity(intent);
+                            finish();
 
 
                         }else{
