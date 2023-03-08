@@ -1,4 +1,4 @@
-package com.example.original.ui.qr;
+package com.example.snapscan.ui.qr;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,4 +1,4 @@
-package com.example.original.ui.map;
+package com.example.snapscan.ui.map;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

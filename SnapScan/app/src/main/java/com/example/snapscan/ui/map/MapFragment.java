@@ -1,4 +1,4 @@
-package com.example.original.ui.map;
+package com.example.snapscan.ui.map;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.original.databinding.FragmentMapBinding;
+import com.example.snapscan.databinding.FragmentMapBinding;
 
 public class MapFragment extends Fragment {
 

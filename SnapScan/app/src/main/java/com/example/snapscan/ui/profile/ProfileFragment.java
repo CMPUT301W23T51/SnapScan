@@ -1,4 +1,4 @@
-package com.example.original.ui.profile;
+package com.example.snapscan.ui.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.original.databinding.FragmentProfileBinding;
+import com.example.snapscan.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment {
 

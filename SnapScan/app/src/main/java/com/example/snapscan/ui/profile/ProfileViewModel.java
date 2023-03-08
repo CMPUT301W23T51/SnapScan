@@ -1,4 +1,4 @@
-package com.example.original.ui.profile;
+package com.example.snapscan.ui.profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

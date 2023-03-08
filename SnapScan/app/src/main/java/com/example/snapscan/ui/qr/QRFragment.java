@@ -1,4 +1,4 @@
-package com.example.original.ui.qr;
+package com.example.snapscan.ui.qr;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.original.databinding.FragmentQrBinding;
+import com.example.snapscan.databinding.FragmentQrBinding;
 
 public class QRFragment extends Fragment {
 
-    private com.example.original.databinding.FragmentQrBinding binding;
+    private com.example.snapscan.databinding.FragmentQrBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
