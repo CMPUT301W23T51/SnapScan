@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple"
+    tools:context=".EditProfile">
+
+    <RelativeLayout
+        android:layout_width="370dp"
+        android:layout_height="670dp"
+        android:padding="20dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/scrolledge">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/ProfilePictureInEdit"
+            android:background="@drawable/profile"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ProfilePictureInEdit"
+            android:id="@+id/EditTextFullNameInEdit"
+            android:layout_marginTop="30dp"
+            android:hint="Full Name"
+            android:inputType="textPersonName"
+            android:layout_marginStart="20dp"
+            android:ems="13"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/EditTextFullNameInEdit"
+            android:id="@+id/EditTextEmailInEdit"
+            android:layout_marginTop="30dp"
+            android:hint="Full Name"
+            android:inputType="textPersonName"
+            android:layout_marginStart="20dp"
+            android:ems="13"/>
+
+
+
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+</ScrollView>
