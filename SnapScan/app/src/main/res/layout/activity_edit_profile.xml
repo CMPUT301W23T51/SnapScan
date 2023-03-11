@@ -35,11 +35,42 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/EditTextFullNameInEdit"
             android:id="@+id/EditTextEmailInEdit"
-            android:layout_marginTop="30dp"
-            android:hint="Full Name"
-            android:inputType="textPersonName"
+            android:layout_marginTop="27dp"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
             android:layout_marginStart="20dp"
-            android:ems="13"/>
+            android:ems="13" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/EditTextEmailInEdit"
+            android:id="@+id/EditTextDobInEdit"
+            android:layout_marginTop="27dp"
+            android:hint="Date Of Birth"
+            android:inputType="date"
+            android:layout_marginStart="20dp"
+            android:ems="13" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/EditTextDobInEdit"
+            android:id="@+id/EditTextPhoneNUmberInEdit"
+            android:layout_marginTop="27dp"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:layout_marginStart="20dp"
+            android:ems="13" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple"
+            android:background="@drawable/scrolledge"
+            android:text="Save"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/SaveButtonEdit"
+            android:layout_below="@+id/EditTextPhoneNUmberInEdit"
+            android:layout_marginTop="29dp"/>
+
 
 
 

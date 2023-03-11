@@ -21,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,18 +29,27 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final String TAG1 = "TAG";
     private EditText editTextRegisterName, EditTextRegisterEmail, EditTextRegisterDob, EditTextRegisterMobile, EditTextRegisterPassword,
             EditTextRegisterConfPass;
     private RadioGroup radioGroupRegisterGender;
     private RadioButton radioButtonRegisterSelectGender;
     private ProgressBar progressBar;
 
+    FirebaseAuth firebaseAuth;
+
     private DatePickerDialog date;
+    FirebaseFirestore firebaseFirestore;
+    String userId;
 
     private static final String TAG = "RegisterActivity";
 
@@ -65,6 +75,16 @@ public class RegisterActivity extends AppCompatActivity {
         radioGroupRegisterGender = findViewById(R.id.radioGroup_RegisterGender);
         radioGroupRegisterGender.clearCheck();
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        progressBar = findViewById(R.id.progressBar);
+
+        //no need to login again who had already logged in
+        if (firebaseAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
+
         //date
         EditTextRegisterDob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,10 +97,10 @@ public class RegisterActivity extends AppCompatActivity {
                 date = new DatePickerDialog(RegisterActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        EditTextRegisterDob.setText(dayOfMonth + "/" + (month+1) + "/" +  year );//dayofMonth+1 where +1 is written taking care of index
+                        EditTextRegisterDob.setText(dayOfMonth + "/" + (month + 1) + "/" + year);//dayofMonth+1 where +1 is written taking care of index
 
                     }
-                },year,month,day);// passing the variables
+                }, year, month, day);// passing the variables
                 date.show();
             }
         });
@@ -104,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String textGender;
 
                 //Checking if the variable is empty or not
-                if(TextUtils.isEmpty(textName)){
+                if (TextUtils.isEmpty(textName)) {
                     Toast.makeText(RegisterActivity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
                     editTextRegisterName.setError("Name is Required");
                     editTextRegisterName.requestFocus();
@@ -120,24 +140,24 @@ public class RegisterActivity extends AppCompatActivity {
                     EditTextRegisterDob.requestFocus();
 
                     //if the email is not valid
-                }else if (TextUtils.isEmpty(textDob)) {
+                } else if (TextUtils.isEmpty(textDob)) {
                     Toast.makeText(RegisterActivity.this, "Please enter your Date Of Birth", Toast.LENGTH_SHORT).show();
                     EditTextRegisterDob.setError("Date of Birth Is required");
                     EditTextRegisterDob.requestFocus();
 
-                // Checking if the button of the radio group is marked or not
+                    // Checking if the button of the radio group is marked or not
                 } else if (radioGroupRegisterGender.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(RegisterActivity.this, "Please select your gender", Toast.LENGTH_SHORT).show();
                     radioButtonRegisterSelectGender.setError("Gender is required");
                     radioButtonRegisterSelectGender.requestFocus();
-                    
+
                 } else if (TextUtils.isEmpty(textPhone)) {
                     Toast.makeText(RegisterActivity.this, "Please enter your Phone Number", Toast.LENGTH_SHORT).show();
                     EditTextRegisterMobile.setError("Phone number is required");
                     EditTextRegisterMobile.requestFocus();
 
-                //now if the Phone number is not equal to 10 digits
-                    
+                    //now if the Phone number is not equal to 10 digits
+
                 } else if (textPhone.length() != 10) {
                     Toast.makeText(RegisterActivity.this, "Please re-enter you Phone number", Toast.LENGTH_SHORT).show();
                     EditTextRegisterMobile.setError("Phone number must be 10 digits");
@@ -148,21 +168,21 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Please enter your Password", Toast.LENGTH_SHORT).show();
                     EditTextRegisterPassword.setError("Password is required");
                     EditTextRegisterPassword.requestFocus();
-                    
-                // Checking if the password is at least of 6 characters or not
+
+                    // Checking if the password is at least of 6 characters or not
                 } else if (textPassword.length() < 6) {
                     Toast.makeText(RegisterActivity.this, "Please enter at least 6 characters", Toast.LENGTH_SHORT).show();
                     EditTextRegisterPassword.setError("Password must be at least 6 characters");
                     EditTextRegisterPassword.requestFocus();
 
-                    
+
                 } else if (TextUtils.isEmpty(textConfPassword)) {
                     Toast.makeText(RegisterActivity.this, "Please confirm your Password", Toast.LENGTH_SHORT).show();
                     EditTextRegisterConfPass.setError("Password confirmation is required");
                     EditTextRegisterConfPass.requestFocus();
 
-                    
-                // now checking if both the passwords match or not that is ( textPassword == textConfPassword)
+
+                    // now checking if both the passwords match or not that is ( textPassword == textConfPassword)
                 } else if (!textPassword.equals(textConfPassword)) {
                     Toast.makeText(RegisterActivity.this, "Please enter the same password", Toast.LENGTH_SHORT).show();
                     EditTextRegisterConfPass.setError("Password must be same as Confirm password");
@@ -172,67 +192,48 @@ public class RegisterActivity extends AppCompatActivity {
                     EditTextRegisterConfPass.clearComposingText();
                     EditTextRegisterPassword.clearComposingText();
 
-                }else{
-
-                    //Getting the gender of the user
-                    textGender = radioButtonRegisterSelectGender.getText().toString();
+                } else {
                     progressBar.setVisibility(View.VISIBLE);
-                    UserRegisteration(textName,textEmail,textDob,textGender,textPhone,textPassword);
-                }
+                    firebaseAuth.createUserWithEmailAndPassword(textEmail, textPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, "Registered", Toast.LENGTH_SHORT).show();
+                                //Saving the userId of the current user (by using the current instance of the firebase authentication)
+                                userId = firebaseAuth.getCurrentUser().getUid();
 
-            }
-            });
+                                //DocumentReference helps to refer to a particular document inside the fireStore
+                                DocumentReference documentReference = firebaseFirestore.collection("users").document(userId);
 
-    }
-    //Registering user
-    private void UserRegisteration(String textName, String textEmail, String textDob, String textGender, String textPhone, String textPassword) {
-        //Instance of Firebase
-        FirebaseAuth authentication = FirebaseAuth.getInstance();
-        authentication.createUserWithEmailAndPassword(textEmail, textPassword).addOnCompleteListener(RegisterActivity.this,
-                new OnCompleteListener<AuthResult>() {  //if user is created then this method will be executed
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();
-                            FirebaseUser firebaseUser = authentication.getCurrentUser();
+                                //using hashmap
+                                Map<String , Object> user = new HashMap<>();
+                                //Inserting the data by giving the key and the data
+                                user.put("name",textName);
+                                user.put("dob",textDob);
+                                user.put("phone",textPhone);
+                                //user.put("gender",textGender);
+                                user.put("email",textEmail);
 
-                            //Storing the data in real time database
-                            UserDetails userDetails = new UserDetails(textName,textDob,textGender,textPhone);
+                                //inserting data to the fireStore cloud database
+                                documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        //log the succes message in the log
+                                        Log.d(TAG1,"OnSuccess profile created"+userId);
+                                    }
+                                });
 
-                            //sending verification email
-                            firebaseUser.sendEmailVerification();
-
-                            //Showing User logged in profile
-                            Intent intent = new Intent(RegisterActivity.this, UserProfileActivity.class);
-                            //Reusing the activity that is instead of using the a new instance intent will be delivered to old activity
-                            //clear_task and new_task will clear all the activities from the stack
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
-
-
-                        }else{
-                            //Testing for error when the code is executed
-                            try {
-                                //creating a custom error
-                                throw task.getException();//getting exception which will occur when registering
-
-                            //defining a block of code which has to be executed when error is there
-                            }catch (FirebaseAuthInvalidCredentialsException e){
-                                EditTextRegisterEmail.setError("your Email is invalid or already in use");
-                                EditTextRegisterEmail.requestFocus();
-                                //catching every other exception
-                            }catch (Exception e){
-                                Log.e(TAG, e.getMessage());//tag identifies the class where the log is called and saving the name of the activity
-                                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
-
-                    }
-                });
-
-
+                    });
+                }
+            }
+        });
     }
-
-
 }
+
+
+

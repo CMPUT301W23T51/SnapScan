@@ -16,9 +16,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,8 +31,10 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText editTextLoginEmail, editTextLoginPassword;
-    private FirebaseAuth authentication;
+    private FirebaseAuth firebaseAuth;
     private ProgressBar progressBar;
+    private TextView forgotPassword;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +44,11 @@ public class LoginActivity extends AppCompatActivity {
         editTextLoginEmail = findViewById(R.id.editText_login_email);
         editTextLoginPassword = findViewById(R.id.editText_loginPassword);
         progressBar = findViewById(R.id.progressBar);
+        firebaseAuth = FirebaseAuth.getInstance();
+        progressBar = findViewById(R.id.progressBar);
+        forgotPassword = findViewById(R.id.ForgotPassword);
 
         //making sure when user exits the app they do not need to login again and again
-        authentication =FirebaseAuth.getInstance();
 
         Button button_login = findViewById(R.id.Button_login1);
 
@@ -54,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 //checking if the user entered the data
-                if(TextUtils.isEmpty(textEmail)){
+                if (TextUtils.isEmpty(textEmail)) {
                     Toast.makeText(LoginActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
                     editTextLoginEmail.setError("Email is required");
                     editTextLoginPassword.requestFocus();
@@ -63,81 +70,100 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Please re-enter your email", Toast.LENGTH_SHORT).show();
                     editTextLoginEmail.setError("Valid email Required");
                     editTextLoginEmail.requestFocus();
-                    
-                    
+
+
                 } else if (TextUtils.isEmpty(textPassword)) {
                     Toast.makeText(LoginActivity.this, "Please enter the password", Toast.LENGTH_SHORT).show();
                     editTextLoginPassword.setError("Please enter the password");
                     editTextLoginPassword.requestFocus();
-                    
-                }else{
+
+                } else {
                     progressBar.setVisibility(View.VISIBLE);
                     userLogin(textEmail, textPassword);
                 }
             }
         });
+
+        //when the user forgets the password
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText resetPassword = new EditText(v.getContext());
+                //integrating the edit text inside the dialog
+                final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
+                passwordResetDialog.setTitle("Reset Password");
+                passwordResetDialog.setMessage("Enter your email to receive the reset link");
+                passwordResetDialog.setView(resetPassword);
+
+                passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //extracting th email
+                        String email = resetPassword.getText().toString();
+                        firebaseAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(LoginActivity.this, "Reset password has been sent to your email", Toast.LENGTH_SHORT).show();
+                            }
+                            //if it fails to send the email
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(LoginActivity.this, "SomeThing went Wrong"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+                    }
+                });
+                passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                passwordResetDialog.create().show();
+            }
+        });
     }
 
+
     private void userLogin(String Email, String Password) {
-        authentication.signInWithEmailAndPassword(Email,Password).addOnCompleteListener(LoginActivity.this,new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(Email, Password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Your are successfully logged in!", Toast.LENGTH_SHORT).show();
 
-                //instance of user
-                    FirebaseUser firebaseUser = authentication.getCurrentUser();
+                    //instance of user
+                    //FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
                     //checking if the user has verified the email
-                    if (firebaseUser.isEmailVerified()){
-                        Toast.makeText(LoginActivity.this, "Your are logged in", Toast.LENGTH_SHORT).show();
+                    //if (firebaseUser.isEmailVerified()){
+                    // Toast.makeText(LoginActivity.this, "Your are logged in", Toast.LENGTH_SHORT).show();
 
 
                     startActivity(new Intent(LoginActivity.this, UserProfileActivity.class));
                     finish();
 
-                    } else {
-                            firebaseUser.sendEmailVerification();
-                            authentication.signOut();
-                            UserAlertDialog();
-                    }
-
-                }else {
-                    Toast.makeText(LoginActivity.this, "Member can't log in", Toast.LENGTH_SHORT).show();
+                } else {
+//                        firebaseUser.sendEmailVerification();
+//                        firebaseAuth.signOut();
+//                        UserAlertDialog();
+                    Toast.makeText(LoginActivity.this, "Error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
-                progressBar.setVisibility(View.GONE);
+
             }
         });
 
-
     }
-
-    private void UserAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle("Email has not been verified");
-        builder.setMessage("Please verify your email now");
-
-        //setting up command to open email app from our own application
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_APP_EMAIL);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-    }
-
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (authentication.getCurrentUser() != null){
+        if (firebaseAuth.getCurrentUser() != null){
             Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, UserProfileActivity.class));
 
