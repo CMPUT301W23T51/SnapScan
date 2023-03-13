@@ -10,7 +10,6 @@ public class QRViewModel extends ViewModel {
 
     public QRViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
     }
 
     public LiveData<String> getText() {
