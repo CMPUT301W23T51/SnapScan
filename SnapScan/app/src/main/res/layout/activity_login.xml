@@ -60,6 +60,19 @@
             android:text="register"
             android:textColor="@color/black" />
 
+        <Button
+            android:id="@+id/lb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_login"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="70dp"
+            android:backgroundTint="@color/purple"
+            android:outlineAmbientShadowColor="@color/light_grey"
+            android:text="Leader Board"
+            android:textColor="@color/black" />
+
     </RelativeLayout>
 
 
