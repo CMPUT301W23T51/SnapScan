@@ -40,5 +40,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Register button
+        Button LBButton = findViewById(R.id.lb);
+        LBButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LB.class);
+                startActivity(intent);
+
+            }
+        });
+
     }
 }
