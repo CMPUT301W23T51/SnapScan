@@ -27,6 +27,9 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+// resource used: Cambo Tutorial. (2022, March 18). Implement Barcode QR Scanner in Android Studio Barcode Reader | Cambo Tutorial [Video]. 
+// YouTube. https://www.youtube.com/watch?v=jtT60yFPelI
+
 public class QRscanActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
