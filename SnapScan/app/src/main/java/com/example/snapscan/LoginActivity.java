@@ -20,18 +20,24 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.regex.Pattern;
-
+import com.example.snapscan.databinding.ActivityLogin2Binding;
 public class LoginActivity extends AppCompatActivity {
     private EditText editTextLoginEmail, editTextLoginPassword;
     private FirebaseAuth authentication;
     private ProgressBar progressBar;
-    @SuppressLint("MissingInflatedId")
+
+    private ActivityLogin2Binding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragment_container_login2, LoginFragment.class, null)
+                    .commit();
+        }
+        binding = ActivityLogin2Binding.inflate(getLayoutInflater());
 
         editTextLoginEmail = findViewById(R.id.editText_login_email);
         editTextLoginPassword = findViewById(R.id.editText_loginPassword);
@@ -73,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void userLogin(String Email, String Password) {
         authentication.signInWithEmailAndPassword(Email,Password).addOnCompleteListener(LoginActivity.this,new OnCompleteListener<AuthResult>() {

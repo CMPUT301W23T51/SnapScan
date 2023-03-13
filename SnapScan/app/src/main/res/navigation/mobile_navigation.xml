@@ -3,28 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/login">
 
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.snapscan.ui.home.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_map"-->
+<!--        android:name="com.example.snapscan.ui.map.MapFragment"-->
+<!--        android:label="Map"-->
+<!--        tools:layout="@layout/fragment_map" />-->
 
-    <fragment
-        android:id="@+id/navigation_map"
-        android:name="com.example.snapscan.ui.map.MapFragment"
-        android:label="Map"
-        tools:layout="@layout/fragment_map" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.snapscan.ui.qr.QRFragment"
-        android:label="QR"
-        tools:layout="@layout/fragment_qr" />
-    <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.example.snapscan.ui.profile.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_qr"-->
+<!--        android:name="com.example.snapscan.ui.qr.QRFragment"-->
+<!--        android:label="QR"-->
+<!--        tools:layout="@layout/fragment_qr" />-->
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_profile"-->
+<!--        android:name="com.example.snapscan.ui.profile.ProfileFragment"-->
+<!--        android:label="Profile"-->
+<!--        tools:layout="@layout/fragment_profile" />-->
+    <activity
+        android:id="@+id/login"
+        android:name="com.example.snapscan.Login"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.snapscan.LoginActivity"
+        android:label="activity_login2"
+        tools:layout="@layout/activity_login2" />
 </navigation>

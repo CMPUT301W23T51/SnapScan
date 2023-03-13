@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        System.out.println("hey");
+        setContentView(R.layout.activity_main);
 
         // Setting up Bottom Navigation
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -32,34 +31,33 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_notifications,R.id.navigation_map,R.id.navigation_profile)
+                R.id.login,R.id.loginActivity)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        NavigationUI.setupWithNavController(navView, navController);
 
-        //getSupportActionBar().setTitle("SnapScan");
 
-        //login button
-        Button LoginButton = findViewById(R.id.button_login);
-        LoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
-        //Register button
-        Button RegisterButton = findViewById(R.id.button_register);
-        RegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(intent);
-
-            }
-        });
+//        //login button
+//        Button LoginButton = findViewById(R.id.button_login);
+//        LoginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        });
+//        //Register button
+//        Button RegisterButton = findViewById(R.id.button_register);
+//        RegisterButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        });
 
     }
 }

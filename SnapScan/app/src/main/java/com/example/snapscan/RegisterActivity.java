@@ -20,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.snapscan.databinding.ActivityRegisterBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -28,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+
 
 import java.util.Calendar;
 
@@ -40,18 +42,17 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private DatePickerDialog date;
+    private ActivityRegisterBinding binding;
 
     private static final String TAG = "RegisterActivity";
 
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //getSupportActionBar().setTitle("Register");
-
+        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         Toast.makeText(RegisterActivity.this, "Register Now", Toast.LENGTH_SHORT).show();
 
         editTextRegisterName = findViewById(R.id.editText_name);
