@@ -48,6 +48,17 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         forgotPassword = findViewById(R.id.ForgotPassword);
 
+        //Register button
+        Button RegisterButton = findViewById(R.id.button_register);
+        RegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
         //making sure when user exits the app they do not need to login again and again
 
         Button button_login = findViewById(R.id.Button_login1);
