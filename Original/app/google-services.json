@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "701045440725",
+    "project_id": "snapscan-ae70c",
+    "storage_bucket": "snapscan-ae70c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701045440725:android:70ec9e3ac1c167dff7e25c",
+        "android_client_info": {
+          "package_name": "com.example.original"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701045440725-j09irn87f544mmrgetlrkgutvg5t6gq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4wKgOcV76b705E_LFa-aZE09zdL1YSu4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701045440725-j09irn87f544mmrgetlrkgutvg5t6gq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
