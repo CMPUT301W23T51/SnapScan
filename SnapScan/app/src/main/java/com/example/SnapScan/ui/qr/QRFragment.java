@@ -116,7 +116,7 @@ ActivityResultLauncher<ScanOptions> barLaucher = registerForActivityResult(new S
         data.put("content", current_qr.getName());
         data.put("unique_name", current_qr.getUnique_name());
         try {
-            data.put("unique id", current_qr.getHashno());
+            data.put("unique id", current_qr.getHashNumber());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

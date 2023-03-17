@@ -23,7 +23,7 @@ public class QRcode {
     String geolocation;
     String description;
     Integer points;
-    String hashno;
+    String hashNumber;
 
     String latitude, longitude;
     String city_name, country_name;
@@ -48,7 +48,7 @@ public class QRcode {
         return this.geolocation;
     }
 
-    // user will input their description in the dialouge box
+    // user will input their description in the dialog box
     public void setDescription(String description) {
         this.description = description;
     }
@@ -64,7 +64,7 @@ public class QRcode {
         this.city_name = city;
         this.country_name = country;
 
-        this.geolocation = this.latitude.toString() + this.longitude.toString() + this.city_name.toString() + this.country_name.toString();
+        this.geolocation = this.latitude + this.longitude + this.city_name + this.country_name;
     }
 
     public static byte[] HashCode(String code) throws NoSuchAlgorithmException {
@@ -73,39 +73,39 @@ public class QRcode {
     }
 
     public static String HexString(byte[] hash) {
-        // Convert byte array into signum representation
+        // Convert byte array into string representation
         BigInteger num = new BigInteger(1, hash);
         // Convert message digest into hex value
-        StringBuilder hexstr = new StringBuilder(num.toString(16));
+        StringBuilder hexString = new StringBuilder(num.toString(16));
         // Pad with leading zeros
-        while (hexstr.length() < 32) {
-            hexstr.insert(0, '0');
+        while (hexString.length() < 32) {
+            hexString.insert(0, '0');
         }
-        return hexstr.toString();
+        return hexString.toString();
     }
 
 
-    public String getHashno() throws NoSuchAlgorithmException {
-        this.hashno = HexString(HashCode(this.name));
-        return this.hashno;
+    public String getHashNumber() throws NoSuchAlgorithmException {
+        this.hashNumber = HexString(HashCode(this.name));
+        return this.hashNumber;
     }
 
     public String getUnique_name() {
-        String ustr = "";
+        StringBuilder userString = new StringBuilder();
         for (char c : this.name.toCharArray()){
-            Integer asc = (int) c;
-            if ((asc > 96 && asc < 123) || (asc > 64 && asc < 91)){
-                ustr = ustr + c;
+            int asciiValue =  (int) c;
+            if ((asciiValue > 96 && asciiValue < 123) || (asciiValue > 64 && asciiValue < 91)){
+                userString.append(c);
             }
         }
-        if (ustr == ""){
+        if (userString.toString().equals("")){
             Random r = new Random();
             char a = (char)(r.nextInt(26) + 'a');
             char b = (char)(r.nextInt(26) + 'a');
             char c = (char)(r.nextInt(26) + 'a');
-            ustr = String.valueOf(a + b + c);
+            userString = new StringBuilder(String.valueOf(a + b + c));
         }
-        this.unique_name = ustr;
+        this.unique_name = userString.toString();
         return this.unique_name;
     }
 
