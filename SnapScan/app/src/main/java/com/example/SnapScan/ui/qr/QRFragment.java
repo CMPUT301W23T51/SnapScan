@@ -1,164 +1,150 @@
 package com.example.SnapScan.ui.qr;
 
-import android.app.AlertDialog;
+import android.Manifest;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
+import com.google.zxing.Result;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
+public class QRFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
 
-public class QRFragment extends Fragment {
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
+    private static final int STORAGE_PERMISSION_REQUEST_CODE = 101;
 
-    private com.example.SnapScan.databinding.FragmentQrBinding binding;
-    private static final String TAG = "QRscanFragment";
-    FirebaseFirestore db;
+    private CaptureManager capture;
+    private DecoratedBarcodeView barcodeScannerView;
+    private boolean isTorchOn = false;
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        // setContentView(R.layout.activity_qrscan);
-//        scancode();
-//    }
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr, container, false);
-        scancode();
+
+        barcodeScannerView = view.findViewById(R.id.barcode_scanner);
+        barcodeScannerView.setTorchListener(this);
+
+        capture = new CaptureManager(getActivity(), barcodeScannerView);
+        barcodeScannerView.setTorchListener(new DecoratedBarcodeView.TorchListener() {
+            @Override
+            public void onTorchOn() {
+                toggleTorch();
+            }
+
+            @Override
+            public void onTorchOff() {
+                toggleTorch();
+            }
+        });
+        capture.initializeFromIntent(getActivity().getIntent(), savedInstanceState);
+        capture.decode();
+
         return view;
     }
-    private void scancode() {
-        ScanOptions options = new ScanOptions();
-        options.setPrompt("Volume up to flash on");
-        options.setBeepEnabled(true);
-        options.setOrientationLocked(true);
-        options.setCaptureActivity(QRFragment.class);
-        barLaucher.launch(options);
-    }
-
-//    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(
-//            new ScanContract(),
-//            new ActivityResultCallback<ScanResult>() {
-//                @Override
-//                public void onActivityResult(ScanResult result) {
-//                    if (result.getContents() != null) {
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-//
-//                        QRcode current_qr = new QRcode(result.getContents(), "Edmonton");
-//                        HashMap<String, String> data = new HashMap<>();
-//                        data.put("Location", "Edmonton");
-//                        data.put("points", String.valueOf(current_qr.getPoints()));
-//                        data.put("content", current_qr.getName());
-//                        data.put("unique_name", current_qr.getUnique_name());
-//                        try {
-//                            data.put("unique id", current_qr.getHashno());
-//                        } catch (NoSuchAlgorithmException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        db = FirebaseFirestore.getInstance();
-//                        final CollectionReference collectionReference = db.collection("QRs");
-//
-//                        collectionReference
-//                                .document(result.getContents())
-//                                .set(data)
-//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        // These are a method which gets executed when the task is succeeded
-//                                        Log.d(TAG, "Data has been added successfully!");
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        // These are a method which gets executed if there’s any problem
-//                                        Log.d(TAG, "Data could not be added!" + e.toString());
-//                                    }
-//                                });
-//
-//                        builder.setTitle("Result");
-//                        builder.setMessage(result.getContents());
-//                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        }).show();
-//                    }
-//                }
-//            });
-ActivityResultLauncher<ScanOptions> barLaucher = registerForActivityResult(new ScanContract(), result -> {
-    if (result.getContents() != null) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-
-        QRcode current_qr = new QRcode(result.getContents(), "Edmonton");
-        HashMap<String, String> data = new HashMap<>();
-        data.put("Location", "Edmonton");
-        data.put("points", String.valueOf(current_qr.getPoints()));
-        data.put("content", current_qr.getName());
-        data.put("unique_name", current_qr.getUnique_name());
-        try {
-            data.put("unique id", current_qr.getHashNumber());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("QRs");
-
-        collectionReference
-                .document(result.getContents())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // These are a method which gets executed when the task is succeeded
-                        Log.d(TAG, "Data has been added successfully!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // These are a method which gets executed if there’s any problem
-                        Log.d(TAG, "Data could not be added!" + e.toString());
-                    }
-                });
-
-        builder.setTitle("Result");
-        builder.setMessage(result.getContents());
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();
-    }
-});
-
-
-
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public void onResume() {
+        super.onResume();
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        } else {
+            capture.onResume();
+        }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        barcodeScannerView.setTorchListener(null);
+        capture.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        capture.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        capture.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                capture.onResume();
+            } else {
+                Toast.makeText(getActivity(), "Camera permission is required for scanning QR codes", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+            // Handle storage permission request
+        }
+    }
+
+    @Override
+    public void onTorchOn() {
+        isTorchOn = true;
+    }
+
+    @Override
+    public void onTorchOff() {
+        isTorchOn = false;
+    }
+
+    private void toggleTorch() {
+        if (isTorchOn) {
+            barcodeScannerView.setTorchOff();
+            onTorchOff();
+        } else {
+            barcodeScannerView.setTorchOn();
+            onTorchOn();
+        }
+    }
+
+    public void onBarcodeScanned(Result result) {
+        String scannedResult = result.getText();
+//        Toast.makeText(getActivity(), "Scanned: " + scannedResult, Toast.LENGTH_LONG).show();
+        // show the result in a dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Scan Result");
+        builder.setMessage(scannedResult);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                // Replace the current fragment with the Decoded Result fragment
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                MyNewFragment newFragment = new MyNewFragment();
+//                fragmentTransaction.replace(R.id.fragment_container, newFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+
+            }
+        });
+        builder.show();
+    }
+
 }
