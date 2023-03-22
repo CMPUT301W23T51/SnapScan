@@ -77,6 +77,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
 //                Location currentLocation = qrcode.currentLocation();
+                //TODO currently QRcode provides Geopoints as Google prefers that over Location
                 Location currentLocation = null;
                 if (currentLocation != null) {
                     LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());

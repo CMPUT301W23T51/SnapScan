@@ -10,27 +10,30 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  * Class to represent a QR codes
  */
 public class QRcode {
 
-    // Static variable to create a unique image QR codes created
-    // https://picsum.photos is used to generate random images which requires the image seed
-    private static int imageSeed = 0;
     private final String result;
+    // https://picsum.photos is used to generate random images which requires the image seed
+    private int imageSeed = 1;
     private String hash;
     private String name;
     private int points;
     private GeoPoint geoPoint;
+    private String imageURL;
 
+    // Constructor for QR code which sets the hash, name, points, image seed and image URL
     public QRcode(String result) {
         this.result = result;
         setHash(result);
         setName();
         setPoints();
-        imageSeed++;
+        setImageSeed();
+        setImageURL();
     }
 
     /**
@@ -39,8 +42,25 @@ public class QRcode {
      *
      * @return String value of Image Seed
      */
-    public static String getImageSeed() {
+    public String getImageSeed() {
         return String.valueOf(imageSeed);
+    }
+
+    /**
+     * Generate a random Image Seed to be used in the QR code image
+     *
+     * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
+     */
+    public void setImageSeed() {
+        imageSeed = new Random().nextInt(100);
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    private void setImageURL() {
+        this.imageURL = "https://picsum.photos/seed/" + this.getImageSeed() + "/250/275";
     }
 
     public String getHash() {
@@ -63,6 +83,15 @@ public class QRcode {
     private void setName() {
         Faker faker = new Faker();
         this.name = faker.ancient().god();
+    }
+
+    /**
+     * Rename the QR code to a name that does not exist in the database
+     *
+     * @return append the image seed to the name
+     */
+    public String nameExistsInFirebase() {
+        return this.name + getImageSeed();
     }
 
     public String getName() {
@@ -121,6 +150,8 @@ public class QRcode {
      * Calculate the score of the QR code
      * if the name of the QR code is a member of the group, the score is multiplied by 1000
      * else the score is multiplied by 10
+     * see <a href="https://commons.apache.org/proper/commons-lang/javadocs/api-3.4/org/apache/commons/lang3/ArrayUtils.html">ArrayUtils</a>
+     * see <a href="https://stackoverflow.com/questions/1128723/how-do-i-determine-whether-an-array-contains-a-particular-value-in-java">StackOverflow</a>
      *
      * @return the score of the QR code
      */

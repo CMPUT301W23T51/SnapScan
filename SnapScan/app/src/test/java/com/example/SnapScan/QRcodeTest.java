@@ -31,7 +31,7 @@ public class QRcodeTest {
     // Test to check if the QR code hash is generated correctly
     @Test
     // for original value site used : https://xorbin.com/tools/sha256-hash-calculator
-    public void hashTest() {
+    public void testHash() {
         String hash = qrcode.getHash();
         assertTrue(hash.length() > 0);
         assertEquals(hash, "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
@@ -61,11 +61,20 @@ public class QRcodeTest {
     }
 
 
-//    @Test
-//    public void testGetGeoPoint() {
-//        qrcode.setgeoPoint(10.0, 20.0);
-//        Assertions.assertNotNull(qrcode.getgeoPoint());
-//    }
+    @Test
+    public void testImageSeed() {
+        Assertions.assertNotNull(qrcode.getImageSeed());
+        int imageSeed = Integer.parseInt(qrcode.getImageSeed());
+        assertTrue(imageSeed >= 0);
+        assertTrue(imageSeed < 101 );
+    }
+    @Test
+    public void testImageURL() {
+        // Regex to check if the URL is valid
+        String regex = "^(https?|ftp)://[a-z\\d-]+(\\.[a-z\\d-]+)+([/?].*)?$";
+        String url = qrcode.getImageURL();
+        assertTrue(url.matches(regex));
+    }
 
     @Test
     public void testGetResult() {
