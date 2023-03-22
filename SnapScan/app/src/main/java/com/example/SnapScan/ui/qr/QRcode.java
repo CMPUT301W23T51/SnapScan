@@ -1,122 +1,131 @@
 package com.example.SnapScan.ui.qr;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
+import androidx.annotation.NonNull;
 
-import androidx.core.app.ActivityCompat;
+import com.github.javafaker.Faker;
+import com.google.firebase.firestore.GeoPoint;
 
-import java.math.BigInteger;
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
 
+/** Class to represent a QR codes */
 public class QRcode {
 
-    private Context context;
+    private final String result;
+    private String hash;
+    private String name;
+    private int points;
 
-    String name;
-    String unique_name;
-    String geolocation;
-    String description;
-    Integer points;
-    String hashNumber;
+    private GeoPoint geoPoint;
 
-    String latitude, longitude;
-    String city_name, country_name;
-
-    public QRcode(Context context) {
-        this.context = context;
+    public QRcode(String result) {
+        this.result = result;
+        setHash(result);
+        setName();
+        setPoints();
     }
 
-    public QRcode(String name, String location){
-        this.name = name;
-        this.geolocation = location;
-        this.points = this.name.length();
+    public String getHash() {
+        return hash;
+    }
+
+    // Getter and Setter for hash
+    private void setHash(String result) {
+        getHash256(result);
+    }
+
+
+    // Getter and Setter for name
+
+    /**
+     * Set the name of the QR code using a random name generator from the Faker library
+     *
+     * @see <a href="faker.readthedocs.io">Faker</a>
+     */
+    private void setName() {
+        Faker faker = new Faker();
+        this.name = faker.ancient().god();
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    public String getGeolocation() {
-        //this.geolocation = this.latitude.toString() + this.longitude.toString() + this.city_name.toString() + this.country_name.toString();
-        //return this.country_name;
-        return this.geolocation;
-    }
-
-    // user will input their description in the dialog box
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    // returns points associated with a specific qr code
-    public Integer getPoints() {
+    // Getter and Setter for points
+    public int getPoints() {
         return this.points;
     }
 
-    public void setGeolocation(Double lat, Double lon, String city, String country) {
-        this.latitude = String.valueOf(lat);
-        this.longitude = String.valueOf(lon);
-        this.city_name = city;
-        this.country_name = country;
-
-        this.geolocation = this.latitude + this.longitude + this.city_name + this.country_name;
+    private void setPoints() {
+        // Get and set points
+        this.points = calculateScore();
     }
 
-    public static byte[] HashCode(String code) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        return messageDigest.digest(code.getBytes(StandardCharsets.UTF_8));
+    // Getter and Setter for GeoPoint
+    // Setters for GeoPoint is public as we will set it after asking for permission
+    public void setgeoPoint(Double latitude, Double longitude) {
+        this.geoPoint = new GeoPoint(latitude, longitude);
     }
 
-    public static String HexString(byte[] hash) {
-        // Convert byte array into string representation
-        BigInteger num = new BigInteger(1, hash);
-        // Convert message digest into hex value
-        StringBuilder hexString = new StringBuilder(num.toString(16));
-        // Pad with leading zeros
-        while (hexString.length() < 32) {
-            hexString.insert(0, '0');
-        }
-        return hexString.toString();
+    public GeoPoint getgeoPoint() {
+        return this.geoPoint;
     }
 
 
-    public String getHashNumber() throws NoSuchAlgorithmException {
-        this.hashNumber = HexString(HashCode(this.name));
-        return this.hashNumber;
-    }
-
-    public String getUnique_name() {
-        StringBuilder userString = new StringBuilder();
-        for (char c : this.name.toCharArray()){
-            int asciiValue =  (int) c;
-            if ((asciiValue > 96 && asciiValue < 123) || (asciiValue > 64 && asciiValue < 91)){
-                userString.append(c);
+    /**
+     * Calculate the Hash 256 value of the QR code and set the hash value
+     *
+     * @param result the result(data) of the QR code
+     * @see <a href="https://www.baeldung.com/sha-256-hashing-java">Baeldung</a>
+     */
+    private void getHash256(@NonNull String result) {
+        String hash256;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = md.digest(result.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hashHex = new StringBuilder(2 * hashBytes.length);
+            for (byte hashByte : hashBytes) {
+                String hex = Integer.toHexString(0xff & hashByte);
+                if (hex.length() == 1) {
+                    hashHex.append('0');
+                }
+                hashHex.append(hex);
             }
+            hash256 = hashHex.toString();
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("Use SHA-256 message digest algorithm");
+            hash256 = Integer.toHexString(result.hashCode());
         }
-        if (userString.toString().equals("")){
-            Random r = new Random();
-            char a = (char)(r.nextInt(26) + 'a');
-            char b = (char)(r.nextInt(26) + 'a');
-            char c = (char)(r.nextInt(26) + 'a');
-            userString = new StringBuilder(String.valueOf(a + b + c));
-        }
-        this.unique_name = userString.toString();
-        return this.unique_name;
+        this.hash = hash256;
     }
 
-    public Location currentLocation() {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return null;
+    /**
+     * Calculate the score of the QR code
+     * if the name of the QR code is a member of the group, the score is multiplied by 1000
+     * else the score is multiplied by 10
+     *
+     * @return the score of the QR code
+     */
+    private int calculateScore() {
+        String hex = this.hash;
+        String[] members = {"Suvan", "Varun", "Anant", "Prabhjot", "Rechal", "Ruilin"};
+        int score = 0;
+        for (int i = 0; i < hex.length(); i++) {
+            score += Character.getNumericValue(hex.charAt(i));
         }
+        if (ArrayUtils.contains(members, this.result)) {
+            score *= 1000;
+        } else {
+            score *= 10;
+        }
+        return Math.round(score);
+    }
 
-        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+    public String getresult() {
+        return this.result;
     }
 }

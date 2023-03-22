@@ -46,7 +46,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        qrcode = new QRcode(getActivity());
+//        qrcode = new QRcode(getActivity());
     }
 
     @Override
@@ -76,7 +76,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         }
                     }
                 }
-                Location currentLocation = qrcode.currentLocation();
+//                Location currentLocation = qrcode.currentLocation();
+                Location currentLocation = null;
                 if (currentLocation != null) {
                     LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
