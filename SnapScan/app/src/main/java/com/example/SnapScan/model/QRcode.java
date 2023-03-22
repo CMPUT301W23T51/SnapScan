@@ -91,7 +91,8 @@ public class QRcode {
      * @return append the image seed to the name
      */
     public String nameExistsInFirebase() {
-        return this.name + getImageSeed();
+        Faker faker = new Faker();
+        return faker.funnyName().name();
     }
 
     public String getName() {
