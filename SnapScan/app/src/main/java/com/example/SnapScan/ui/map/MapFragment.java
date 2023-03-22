@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.SnapScan.R;
-import com.example.SnapScan.ui.qr.QRcode;
+import com.example.SnapScan.model.QRcode;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;

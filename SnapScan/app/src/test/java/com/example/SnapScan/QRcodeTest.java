@@ -3,7 +3,7 @@ package com.example.SnapScan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.SnapScan.ui.qr.QRcode;
+import com.example.SnapScan.model.QRcode;
 import com.github.javafaker.Faker;
 
 import org.junit.jupiter.api.Assertions;

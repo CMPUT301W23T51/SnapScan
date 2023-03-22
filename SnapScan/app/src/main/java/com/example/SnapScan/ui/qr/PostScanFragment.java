@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.R;
+import com.example.SnapScan.model.QRcode;
 import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -39,7 +40,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.HashMap;
 

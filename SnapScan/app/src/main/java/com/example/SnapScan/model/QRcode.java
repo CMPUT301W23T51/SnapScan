@@ -1,4 +1,4 @@
-package com.example.SnapScan.ui.qr;
+package com.example.SnapScan.model;
 
 import androidx.annotation.NonNull;
 
