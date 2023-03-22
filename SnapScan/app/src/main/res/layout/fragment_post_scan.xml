@@ -1,13 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageViewQrCode"
+        android:layout_width="250dp"
+        android:layout_height="275dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:clickable="false"
+        android:contentDescription="Image of QR Code"
+        android:src="@drawable/appicon" />
+
     <TextView
-        android:id="@+id/postScanText"
-        android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:gravity="center_vertical|center_horizontal"
-        android:hint="Post Scan"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:id="@+id/qr_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageViewQrCode"
+        android:clickable="false"
+        android:hint="Name: "
+        android:maxWidth="2000dp"
+        android:maxHeight="75dp"
+        android:padding="20dp"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/qr_score_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/qr_name_text"
+        android:clickable="false"
+        android:hint="Score: "
+        android:maxWidth="250dp"
+        android:maxHeight="75dp"
+        android:padding="20dp"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/qr_result_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/qr_score_text"
+        android:clickable="false"
+        android:hint="Result: "
+        android:maxWidth="250dp"
+        android:maxHeight="75dp"
+        android:padding="20dp"
+        android:textSize="25sp" />
+
+
+    <!--    <Switch-->
+    <!--        android:id="@+id/switch_save_picture"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_toEndOf="@+id/qr_score"-->
+    <!--        android:text="Save Picture" />-->
+
+    <!--    <Switch-->
+    <!--        android:id="@+id/switch_save_location"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_toEndOf="@+id/switch_save_picture"-->
+    <!--        android:text="Save Location" />-->
+
+</RelativeLayout>

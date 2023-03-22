@@ -11,14 +11,18 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/** Class to represent a QR codes */
+/**
+ * Class to represent a QR codes
+ */
 public class QRcode {
 
+    // Static variable to create a unique image QR codes created
+    // https://picsum.photos is used to generate random images which requires the image seed
+    private static int imageSeed = 0;
     private final String result;
     private String hash;
     private String name;
     private int points;
-
     private GeoPoint geoPoint;
 
     public QRcode(String result) {
@@ -26,6 +30,17 @@ public class QRcode {
         setHash(result);
         setName();
         setPoints();
+        imageSeed++;
+    }
+
+    /**
+     * Get the string Value of image seed to be used in the QR code image
+     * returning as string because the image seed is used in the URL
+     *
+     * @return String value of Image Seed
+     */
+    public static String getImageSeed() {
+        return String.valueOf(imageSeed);
     }
 
     public String getHash() {
@@ -125,7 +140,7 @@ public class QRcode {
     }
 
 
-    public String getresult() {
+    public String getResult() {
         return this.result;
     }
 }

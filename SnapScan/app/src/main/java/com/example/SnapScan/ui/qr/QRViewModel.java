@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel;
 
 public class QRViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private QRcode ScannedQrCode;
 
     public QRViewModel() {
-        mText = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void setScannedQrCode(QRcode qrCode){
+        this.ScannedQrCode = qrCode;
+    }
+    public QRcode getScannedQrCode(){
+        return this.ScannedQrCode;
     }
 }

@@ -69,7 +69,7 @@ public class QRcodeTest {
 
     @Test
     public void testGetResult() {
-        Assertions.assertEquals("test", qrcode.getresult());
+        Assertions.assertEquals("test", qrcode.getResult());
     }
 
 }

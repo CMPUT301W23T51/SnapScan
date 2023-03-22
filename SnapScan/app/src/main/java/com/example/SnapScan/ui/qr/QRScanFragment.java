@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.SnapScan.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -61,11 +62,10 @@ public class QRScanFragment extends Fragment {
                 barcodeScannerView.setStatusText(result.getText());
                 barcodeScannerView.pause();
 
-                // Replace the current fragment with the Decoded Result fragment
+                // Replace the current fragment with the PostScanFragment
                 Bundle data = new Bundle();
                 data.putString("Scanned Data", result.getText());
                 getParentFragmentManager().setFragmentResult("dataFromQR", data);
-                // Replace the current fragment with the PostScanFragment
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 PostScanFragment newFragment = new PostScanFragment();

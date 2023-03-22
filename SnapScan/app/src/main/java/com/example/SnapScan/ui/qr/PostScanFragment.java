@@ -6,34 +6,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import com.squareup.picasso.Picasso;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.example.SnapScan.R;
 
 public class PostScanFragment extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
+    QRcode scannedQrCode;
 
-    private QRViewModel postScanViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        postScanViewModel =
-                new ViewModelProvider(this).get(QRViewModel.class);
         View root = inflater.inflate(R.layout.fragment_post_scan, container, false);
 
-        final TextView textView = root.findViewById(R.id.postScanText);
 
         // Check if location permission is already granted
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -43,13 +38,28 @@ public class PostScanFragment extends Fragment {
             // Location permission is not granted yet, request it
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
+        // Receive the result from ScanQRFragment
+        getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
+            String data = result.getString("Scanned Data");
+            scannedQrCode = new QRcode(data);
 
-        postScanViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
+            //Setting up the  views to display the data
+
+            // Using Picasso to load the image from the URL
+            ImageView imageView = root.findViewById(R.id.imageViewQrCode);
+            String URL = "https://picsum.photos/seed/" + QRcode.getImageSeed() + "/270";
+            Picasso.get()
+                    .load(URL)
+                    .into(imageView);
+
+            TextView QR_score = root.findViewById(R.id.qr_score_text);
+            TextView QR_name = root.findViewById(R.id.qr_name_text);
+            TextView QR_result = root.findViewById(R.id.qr_result_text);
+            QR_score.setText(String.valueOf(scannedQrCode.getPoints()));
+            QR_name.setText(scannedQrCode.getName());
+            QR_result.setText(scannedQrCode.getResult());
         });
+
 
         return root;
     }
