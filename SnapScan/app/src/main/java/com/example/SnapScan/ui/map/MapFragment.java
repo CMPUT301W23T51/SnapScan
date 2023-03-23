@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.SnapScan.R;
-import com.example.SnapScan.ui.qr.QRcode;
+import com.example.SnapScan.model.QRcode;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -46,7 +46,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        qrcode = new QRcode(getActivity());
+//        qrcode = new QRcode(getActivity());
     }
 
     @Override
@@ -76,7 +76,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         }
                     }
                 }
-                Location currentLocation = qrcode.currentLocation();
+//                Location currentLocation = qrcode.currentLocation();
+                //TODO currently QRcode provides Geopoints as Google prefers that over Location
+                Location currentLocation = null;
                 if (currentLocation != null) {
                     LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
