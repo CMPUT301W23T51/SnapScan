@@ -51,6 +51,8 @@
         android:padding="20dp"
         android:textSize="25sp" />
 
+<!--    TODO: Changes photo_button and gelocation_button to switch-->
+
     <Button
         android:id="@+id/photo_button"
         android:layout_width="170dp"
@@ -67,7 +69,7 @@
         android:layout_below="@id/qr_result_text"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="15dp"
-        android:text="Add Geolocation" />
+        android:text="Add Location" />
 
     <Button
         android:id="@+id/save_qr_button"

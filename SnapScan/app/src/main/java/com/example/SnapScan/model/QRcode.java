@@ -87,12 +87,12 @@ public class QRcode {
 
     /**
      * Rename the QR code to a name that does not exist in the database
-     *
+     * image seed is appended to the name to ensure that the name is unique
      * @return append the image seed to the name
      */
     public String nameExistsInFirebase() {
         Faker faker = new Faker();
-        return faker.funnyName().name();
+        return faker.funnyName().name() + this.getImageSeed();
     }
 
     public String getName() {
