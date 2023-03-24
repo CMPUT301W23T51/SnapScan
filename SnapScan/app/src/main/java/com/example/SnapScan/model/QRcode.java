@@ -152,10 +152,11 @@ public class QRcode {
         String[] members = {"Suvan", "Varun", "Anant", "Prabhjot", "Rechal", "Ruilin"};
         int score = 0;
         for (int i = 0; i < hex.length(); i++) {
-            score += Character.getNumericValue(hex.charAt(i));
+            int charValue = Character.getNumericValue(hex.charAt(i));
             // Weight the score based on the position of the character in the string
             int positionFactor = (hex.length() - i) * 2;
-            score *= positionFactor;
+            charValue *= positionFactor;
+            score += charValue;
         }
 
         if (ArrayUtils.contains(members, this.result)) {
@@ -164,21 +165,6 @@ public class QRcode {
             score *= 10;
         }
         return Math.round(score);
-    }
-    public static int scoreString(String inputString) {
-        int score = 0;
-        for (int i = 0; i < inputString.length(); i++) {
-            char c = inputString.charAt(i);
-            int charScore = (int) c;
-
-            // Weight the score based on the position of the character in the string
-            int positionFactor = (inputString.length() - i) * 2;
-            charScore *= positionFactor;
-
-            // Add the weighted score to the total score
-            score += charScore;
-        }
-        return score;
     }
 
 
