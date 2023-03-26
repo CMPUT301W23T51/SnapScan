@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,6 +60,11 @@ public class PostScanFragment extends Fragment {
     String QRcodeName;
     FirebaseFirestore db;
 
+    // need these variables afterwards
+    EditText comment;
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
+    String userID;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +94,8 @@ public class PostScanFragment extends Fragment {
 
 
             //Setting up the  views to display the data
+            comment = root.findViewById(R.id.editTextTextPersonName); // comment stores the edittext entered by the user
+
             TextView QR_score = root.findViewById(R.id.qr_score_text);
             TextView QR_name = root.findViewById(R.id.qr_name_text);
             TextView QR_result = root.findViewById(R.id.qr_result_text);
@@ -216,6 +225,28 @@ public class PostScanFragment extends Fragment {
                         Log.d(TAG, "Data could not be added!" + e);
                     }
                 });
+
+        // Add comment to database specific to a qr code
+
+        // Right now I am using player "akwrgbpiyBPHzTUlgY4dNHFP3NN2" once we get the user ID set document to user ID
+
+        CollectionReference cf = db.collection("users");
+        HashMap<String, String> d = new HashMap<>();
+        d.put("comment", comment.getText().toString());
+        cf.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("scanned_qr").document(documentName).set(d)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data has been added successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be added!" + e);
+                    }
+                });
+
     }
 
 }
