@@ -13,6 +13,7 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:contentDescription="Profile Photo of User"
         app:srcCompat="@drawable/profile" />
 
     <TextView
@@ -39,7 +40,7 @@
         android:text="TOTAL QRS"
         android:textAllCaps="true"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -78,7 +79,7 @@
         android:text="TOTAL Points"
         android:textAllCaps="true"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -100,9 +101,10 @@
         android:id="@+id/edit_profile_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/leaderboard_button"
+        android:layout_below="@id/myQr_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:textAlignment="center"
         android:text="Edit Profile"
         android:textColor="@color/black" />
 
@@ -113,13 +115,29 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/qr_count_int"
         android:layout_centerHorizontal="true"
+        android:clickable="true"
         android:layout_marginTop="30dp"
         android:drawableStart="@drawable/ranking"
         android:drawablePadding="15dp"
         android:text="Leaderboard"
         android:textAlignment="textEnd"
         android:textAllCaps="true"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:focusable="true" />
+    <Button
+        android:id="@+id/myQr_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/leaderboard_button"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:layout_marginTop="30dp"
+        android:drawablePadding="15dp"
+        android:text="My QRs"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:focusable="true" />
 
 
 </RelativeLayout>
