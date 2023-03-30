@@ -57,8 +57,6 @@ public class PostScanFragment extends Fragment {
     QRcode scannedQrCode;
     String QRHash;
     FirebaseFirestore db;
-
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_post_scan, container, false);
@@ -148,16 +146,15 @@ public class PostScanFragment extends Fragment {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        // if Document exists change name of the QR code to avoid overwriting
-                                        Log.d(TAG, "Document with same Hash Value exists in Firebase");
-                                        Log.d(TAG, "Added QR code to user's list of QR codes");
-                                    } else {
-                                        // if Document does not exist add the QR code to the database normally
+                                    if (!document.exists()) {
+                                        // if Document does not exist add the QR code to the database
                                         Log.d(TAG, "Document with same Hash does not exist in Firebase, Adding to Firebase");
                                         addQRToFirebase(QRHash);
                                     }
-                                    // TODO: Add QR to the user's list of QR codes
+                                    // Add the QR code to the user's collection
+                                    // Get the comment from the user
+                                    EditText comment = root.findViewById(R.id.editText_qr_comment);
+                                    addToUserCollection(comment.getText().toString(), QRHash);
                                 } else {
                                     Log.d(TAG, "Error getting document: ", task.getException());
                                 }
@@ -165,10 +162,10 @@ public class PostScanFragment extends Fragment {
                         });
 
                 // Go back to Profile fragment to signify completion of QR scan
-                onDestroy();
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
                 navController.navigate(R.id.navigation_profile);
                 Toast.makeText(getContext(), "QR code saved successfully", Toast.LENGTH_SHORT).show();
+                onDestroy();
             }
         });
 
@@ -194,43 +191,8 @@ public class PostScanFragment extends Fragment {
     private void addQRToFirebase(String documentName) {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
-        // Add the data to the database
-        HashMap<String, Object> data = new HashMap<>();
-        try {
-            data.put("Latitude", String.valueOf(scannedQrCode.getgeoPoint().getLatitude()));
-            data.put("Longitude", String.valueOf(scannedQrCode.getgeoPoint().getLongitude()));
-        } catch (Exception e) {
-            data.put("Latitude", "No Location");
-            data.put("Longitude", "No Location");
-        }
-        data.put("Points", scannedQrCode.getPoints());
-        data.put("Name", scannedQrCode.getName());
-        data.put("Result", scannedQrCode.getResult());
-        data.put("ImageURL", scannedQrCode.getImageURL());
-        collectionReference.document(documentName).set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added successfully!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e);
-                    }
-                });
-
-
-        // Add comment to database specific to a qr code
-
-        // Right now I am using player "akwrgbpiyBPHzTUlgY4dNHFP3NN2" once we get the user ID set document to user ID
-
-        CollectionReference cf = db.collection("users");
-        EditText comment = getView().findViewById(R.id.editText_qr_comment);
-        HashMap<String, String> d = new HashMap<>();
-        d.put("comment", comment.getText().toString());
-        cf.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("Scanned QRs").document(documentName).set(d)
+        // Add the QR to the database
+        collectionReference.document(documentName).set(scannedQrCode)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -245,6 +207,32 @@ public class PostScanFragment extends Fragment {
                 });
 
     }
+    //TODO: update function to take user information as a parameter
+    /**
+     * This method adds a QR code to the user's collection
+     *
+     * @param comment      the comment the user has added to the QR code
+     * @param documentName the name of the QR code to be added to the users collection
+     */
+    private void addToUserCollection(String comment, String documentName){
+        db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("Users");
+        HashMap<String, Object> userComment = new HashMap<>();
+        userComment.put("Comment",comment);
+        // Make the change here
+        collectionReference.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("Scanned QRs").document(documentName).set(userComment)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data has been added successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be added!" + e);
+                    }
+                });
+    }
 
 }
-
