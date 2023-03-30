@@ -18,13 +18,12 @@ import java.util.Random;
 public class QRcode {
 
     private final String result;
-    // https://picsum.photos is used to generate random images which requires the image seed
-    private int imageSeed = 1;
     private String hash;
     private String name;
     private int points;
     private GeoPoint geoPoint;
     private String imageURL;
+
 
     // Constructor for QR code which sets the hash, name, points, image seed and image URL
     public QRcode(String result) {
@@ -32,27 +31,7 @@ public class QRcode {
         setHash(result);
         setName();
         setPoints();
-        setImageSeed();
         setImageURL();
-    }
-
-    /**
-     * Get the string Value of image seed to be used in the QR code image
-     * returning as string because the image seed is used in the URL
-     *
-     * @return String value of Image Seed
-     */
-    public String getImageSeed() {
-        return String.valueOf(imageSeed);
-    }
-
-    /**
-     * Generate a random Image Seed to be used in the QR code image
-     *
-     * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
-     */
-    public void setImageSeed() {
-        imageSeed = new Random().nextInt(100);
     }
 
     public String getImageURL() {
@@ -63,9 +42,11 @@ public class QRcode {
      * Set the image URL of the QR code
      * The image URL is generated using the image seed
      * @see <a href="https://picsum.photos">Picsum</a>
+     * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
      */
     private void setImageURL() {
-        this.imageURL = "https://picsum.photos/seed/" + this.getImageSeed() + "/400/275";
+        int imageSeed = new Random().nextInt(100);
+        this.imageURL = "https://picsum.photos/seed/" + imageSeed + "/400/275";
                                                                                 //Width/Height
     }
 
@@ -89,16 +70,6 @@ public class QRcode {
     private void setName() {
         Faker faker = new Faker();
         this.name = faker.ancient().god();
-    }
-
-    /**
-     * Rename the QR code to a name that does not exist in the database
-     * image seed is appended to the name to ensure that the name is unique
-     * @return append the image seed to the name
-     */
-    public String nameExistsInFirebase() {
-        Faker faker = new Faker();
-        return faker.funnyName().name() + this.getImageSeed();
     }
 
     public String getName() {
