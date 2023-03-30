@@ -59,8 +59,14 @@ public class QRcode {
         return imageURL;
     }
 
+    /**
+     * Set the image URL of the QR code
+     * The image URL is generated using the image seed
+     * @see <a href="https://picsum.photos">Picsum</a>
+     */
     private void setImageURL() {
-        this.imageURL = "https://picsum.photos/seed/" + this.getImageSeed() + "/250/275";
+        this.imageURL = "https://picsum.photos/seed/" + this.getImageSeed() + "/400/275";
+                                                                                //Width/Height
     }
 
     public String getHash() {

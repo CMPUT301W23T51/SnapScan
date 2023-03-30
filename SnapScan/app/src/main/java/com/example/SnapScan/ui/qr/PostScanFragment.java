@@ -24,12 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
-import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationTokenSource;
@@ -37,7 +36,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,14 +55,9 @@ public class PostScanFragment extends Fragment {
     private final int CAMERA_REQUEST_CODE = 103;
     FusedLocationProviderClient fusedLocationProviderClient;
     QRcode scannedQrCode;
-    String QRcodeName;
+    String QRHash;
     FirebaseFirestore db;
 
-    // need these variables afterwards
-    EditText comment;
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-    String userID;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -94,14 +87,12 @@ public class PostScanFragment extends Fragment {
 
 
             //Setting up the  views to display the data
-            comment = root.findViewById(R.id.editTextTextPersonName); // comment stores the edittext entered by the user
-
             TextView QR_score = root.findViewById(R.id.qr_score_text);
             TextView QR_name = root.findViewById(R.id.qr_name_text);
             TextView QR_result = root.findViewById(R.id.qr_result_text);
             QR_score.setText(String.valueOf(scannedQrCode.getPoints()));
             QR_name.setText(scannedQrCode.getName());
-            QRcodeName = scannedQrCode.getName();
+            QRHash = scannedQrCode.getHash();
             QR_result.setText(scannedQrCode.getResult());
 
         });
@@ -112,6 +103,7 @@ public class PostScanFragment extends Fragment {
         addPhotoButton.setOnClickListener(view -> {
             Intent cameraIntent = new Intent(ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            //TODO: add code to save the image to the database
         });
 
         // Geolocation Button to add the location of the QR code
@@ -150,7 +142,7 @@ public class PostScanFragment extends Fragment {
             public void onClick(View view) {
                 db = FirebaseFirestore.getInstance();
                 // Check if the QR code already exists in the database
-                db.collection("QR").document(QRcodeName).get()
+                db.collection("QR").document(QRHash).get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -158,14 +150,14 @@ public class PostScanFragment extends Fragment {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         // if Document exists change name of the QR code to avoid overwriting
-                                        Log.d(TAG, "Document with same Name exists in Firebase");
-                                        String DocumentName = scannedQrCode.nameExistsInFirebase();
-                                        addQRToFirebase(DocumentName);
+                                        Log.d(TAG, "Document with same Hash Value exists in Firebase");
+                                        Log.d(TAG, "Added QR code to user's list of QR codes");
                                     } else {
                                         // if Document does not exist add the QR code to the database normally
-                                        Log.d(TAG, "Document with same Name does not exist in Firebase");
-                                        addQRToFirebase(QRcodeName);
+                                        Log.d(TAG, "Document with same Hash does not exist in Firebase, Adding to Firebase");
+                                        addQRToFirebase(QRHash);
                                     }
+                                    // TODO: Add QR to the user's list of QR codes
                                 } else {
                                     Log.d(TAG, "Error getting document: ", task.getException());
                                 }
@@ -173,11 +165,10 @@ public class PostScanFragment extends Fragment {
                         });
 
                 // Go back to Profile fragment to signify completion of QR scan
-                Fragment fragment = new ProfileFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, fragment);
-                fragmentTransaction.commit();
+                onDestroy();
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.navigation_profile);
+                Toast.makeText(getContext(), "QR code saved successfully", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -197,20 +188,24 @@ public class PostScanFragment extends Fragment {
 
     /**
      * This method is adds a QR code to the Firebase database
+     *
      * @param documentName the name of the document to be added to the database
      */
     private void addQRToFirebase(String documentName) {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the data to the database
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, Object> data = new HashMap<>();
         try {
-            data.put("Location", scannedQrCode.getgeoPoint().toString());
+            data.put("Latitude", String.valueOf(scannedQrCode.getgeoPoint().getLatitude()));
+            data.put("Longitude", String.valueOf(scannedQrCode.getgeoPoint().getLongitude()));
         } catch (Exception e) {
-            data.put("Location", "No Location");
+            data.put("Latitude", "No Location");
+            data.put("Longitude", "No Location");
         }
-        data.put("Points", String.valueOf(scannedQrCode.getPoints()));
-        data.put("Hash", scannedQrCode.getHash());
+        data.put("Points", scannedQrCode.getPoints());
+        data.put("Name", scannedQrCode.getName());
+        data.put("Result", scannedQrCode.getResult());
         data.put("ImageURL", scannedQrCode.getImageURL());
         collectionReference.document(documentName).set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -226,14 +221,16 @@ public class PostScanFragment extends Fragment {
                     }
                 });
 
+
         // Add comment to database specific to a qr code
 
         // Right now I am using player "akwrgbpiyBPHzTUlgY4dNHFP3NN2" once we get the user ID set document to user ID
 
         CollectionReference cf = db.collection("users");
+        EditText comment = getView().findViewById(R.id.editText_qr_comment);
         HashMap<String, String> d = new HashMap<>();
         d.put("comment", comment.getText().toString());
-        cf.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("scanned_qr").document(documentName).set(d)
+        cf.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("Scanned QRs").document(documentName).set(d)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
