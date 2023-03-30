@@ -45,6 +45,7 @@ public class QRcode {
      * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
      */
     private void setImageURL() {
+        // Generate a random number between 1 and 100 for image seed
         int imageSeed = new Random().nextInt(100);
         this.imageURL = "https://picsum.photos/seed/" + imageSeed + "/400/275";
                                                                                 //Width/Height

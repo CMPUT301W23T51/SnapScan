@@ -23,12 +23,14 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        Button MyQrsButton = binding.myQrButton;
 
+        // Open the QRListFragment when the button is clicked
+        Button MyQrsButton = binding.myQrButton;
         MyQrsButton.setOnClickListener(v -> {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, new QRListFragment());
+            // Allow use to go back to profile when back button is pressed
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });

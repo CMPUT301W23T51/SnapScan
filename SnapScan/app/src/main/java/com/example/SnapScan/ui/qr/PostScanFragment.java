@@ -152,8 +152,10 @@ public class PostScanFragment extends Fragment {
                                         addQRToFirebase(QRHash);
                                     }
                                     // Add the QR code to the user's collection
+
                                     // Get the comment from the user
                                     EditText comment = root.findViewById(R.id.editText_qr_comment);
+
                                     addToUserCollection(comment.getText().toString(), QRHash);
                                 } else {
                                     Log.d(TAG, "Error getting document: ", task.getException());
@@ -184,14 +186,16 @@ public class PostScanFragment extends Fragment {
     }
 
     /**
-     * This method is adds a QR code to the Firebase database
+     * This method is adds a QR code object to the Firebase database
      *
      * @param documentName the name of the document to be added to the database
+     * @see <a href=https://firebase.google.com/docs/firestore/manage-data/add-data?hl=en </a>
+     *
      */
     private void addQRToFirebase(String documentName) {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
-        // Add the QR to the database
+        // Add the QR Object to the database
         collectionReference.document(documentName).set(scannedQrCode)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -209,7 +213,7 @@ public class PostScanFragment extends Fragment {
     }
     //TODO: update function to take user information as a parameter
     /**
-     * This method adds a QR code to the user's collection
+     * This method adds a QR code to the user's collection with a comment
      *
      * @param comment      the comment the user has added to the QR code
      * @param documentName the name of the QR code to be added to the users collection
@@ -219,7 +223,7 @@ public class PostScanFragment extends Fragment {
         CollectionReference collectionReference = db.collection("Users");
         HashMap<String, Object> userComment = new HashMap<>();
         userComment.put("Comment",comment);
-        // Make the change here
+        // Make the change here after to do is done
         collectionReference.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("Scanned QRs").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
