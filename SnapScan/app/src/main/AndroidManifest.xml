@@ -15,6 +15,13 @@
         android:theme="@style/Theme.SnapScan"
         tools:targetApi="31">
         <activity
+            android:name=".OtherProfile"
+            android:exported="false" />
+
+        <activity
+            android:name=".leaderboard"
+            android:exported="false" />
+        <activity
             android:name=".EditProfile"
             android:exported="false" />
         <activity
