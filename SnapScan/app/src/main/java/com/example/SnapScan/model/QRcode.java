@@ -85,15 +85,6 @@ public class QRcode {
         this.name = faker.ancient().god();
     }
 
-    /**
-     * Rename the QR code to a name that does not exist in the database
-     * image seed is appended to the name to ensure that the name is unique
-     * @return append the image seed to the name
-     */
-    public String nameExistsInFirebase() {
-        Faker faker = new Faker();
-        return faker.funnyName().name() + this.getImageSeed();
-    }
 
     public String getName() {
         return name;
@@ -161,8 +152,13 @@ public class QRcode {
         String[] members = {"Suvan", "Varun", "Anant", "Prabhjot", "Rechal", "Ruilin"};
         int score = 0;
         for (int i = 0; i < hex.length(); i++) {
-            score += Character.getNumericValue(hex.charAt(i));
+            int charValue = Character.getNumericValue(hex.charAt(i));
+            // Weight the score based on the position of the character in the string
+            int positionFactor = (hex.length() - i) * 2;
+            charValue *= positionFactor;
+            score += charValue;
         }
+
         if (ArrayUtils.contains(members, this.result)) {
             score *= 1000;
         } else {
@@ -170,6 +166,7 @@ public class QRcode {
         }
         return Math.round(score);
     }
+
 
 
     public String getResult() {
