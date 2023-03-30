@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserProfileActivity"
+    android:background="@color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="@color/purple">
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/profile"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:id="@+id/show_profile_picture"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QR codes"
+                android:id="@+id/QrCode"
+                android:padding="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="150dp"
+                android:textSize="20dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Points"
+                android:id="@+id/points"
+                android:padding="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="280dp"
+                android:textSize="20dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:layout_marginTop="5dp">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="125dp"
+                    android:onClick="logout"
+                    android:text="logout"
+                    android:textSize="10dp"
+                    app:flow_horizontalBias="0.5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="150dp"
+                    android:layout_centerHorizontal="true"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="245dp"
+                    android:layout_marginTop="150dp"
+                    android:text="Reset Password"
+                    android:textSize="10dp"
+                    android:id="@+id/ResetPassword"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change Profile"
+                    android:textSize="10dp"
+                    android:layout_marginLeft="245dp"
+                    android:layout_marginTop="100dp"
+                    android:id="@+id/ChangeProfilePicture"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ScanQr"
+                    android:text="Scan QR"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginLeft="150dp"/>
+                <Button
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/LeaderBoard_button"
+                    android:text="leaderBoard"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginLeft="150dp"/>
+
+
+
+
+
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_showFullName"
+                android:hint="Loading..."
+                android:layout_marginTop="110dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="15dp"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_showEmail"
+                android:hint="Loading..."
+                android:layout_below="@+id/textView_showFullName"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_showDob"
+                android:hint="Loading..."
+                android:layout_below="@+id/textView_showEmail"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_showPhoneNumber"
+                android:hint="Loading..."
+                android:layout_below="@+id/textView_showDob"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_showGender"
+                android:hint="Loading..."
+                android:layout_below="@+id/textView_showPhoneNumber"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="15dp"/>
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"/>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/leaderboard_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Leaderboard"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/border" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/leaderboard_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/leaderboard_title"
+            android:layout_marginTop="16dp"
+            android:divider="@null"
+            android:background="@drawable/border" />
+
+    </LinearLayout>
+
+
+</ScrollView>
