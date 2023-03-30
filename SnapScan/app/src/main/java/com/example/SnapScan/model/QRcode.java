@@ -18,13 +18,12 @@ import java.util.Random;
 public class QRcode {
 
     private final String result;
-    // https://picsum.photos is used to generate random images which requires the image seed
-    private int imageSeed = 1;
     private String hash;
     private String name;
     private int points;
     private GeoPoint geoPoint;
     private String imageURL;
+
 
     // Constructor for QR code which sets the hash, name, points, image seed and image URL
     public QRcode(String result) {
@@ -32,35 +31,24 @@ public class QRcode {
         setHash(result);
         setName();
         setPoints();
-        setImageSeed();
         setImageURL();
-    }
-
-    /**
-     * Get the string Value of image seed to be used in the QR code image
-     * returning as string because the image seed is used in the URL
-     *
-     * @return String value of Image Seed
-     */
-    public String getImageSeed() {
-        return String.valueOf(imageSeed);
-    }
-
-    /**
-     * Generate a random Image Seed to be used in the QR code image
-     *
-     * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
-     */
-    public void setImageSeed() {
-        imageSeed = new Random().nextInt(100);
     }
 
     public String getImageURL() {
         return imageURL;
     }
 
+    /**
+     * Set the image URL of the QR code
+     * The image URL is generated using the image seed
+     * @see <a href="https://picsum.photos">Picsum</a>
+     * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
+     */
     private void setImageURL() {
-        this.imageURL = "https://picsum.photos/seed/" + this.getImageSeed() + "/250/275";
+        // Generate a random number between 1 and 100 for image seed
+        int imageSeed = new Random().nextInt(100);
+        this.imageURL = "https://picsum.photos/seed/" + imageSeed + "/400/275";
+                                                                                //Width/Height
     }
 
     public String getHash() {
@@ -84,7 +72,6 @@ public class QRcode {
         Faker faker = new Faker();
         this.name = faker.ancient().god();
     }
-
 
     public String getName() {
         return name;
@@ -152,13 +139,8 @@ public class QRcode {
         String[] members = {"Suvan", "Varun", "Anant", "Prabhjot", "Rechal", "Ruilin"};
         int score = 0;
         for (int i = 0; i < hex.length(); i++) {
-            int charValue = Character.getNumericValue(hex.charAt(i));
-            // Weight the score based on the position of the character in the string
-            int positionFactor = (hex.length() - i) * 2;
-            charValue *= positionFactor;
-            score += charValue;
+            score += Character.getNumericValue(hex.charAt(i));
         }
-
         if (ArrayUtils.contains(members, this.result)) {
             score *= 1000;
         } else {
@@ -166,7 +148,6 @@ public class QRcode {
         }
         return Math.round(score);
     }
-
 
 
     public String getResult() {

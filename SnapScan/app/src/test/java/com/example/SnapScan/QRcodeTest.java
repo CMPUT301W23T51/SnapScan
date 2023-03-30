@@ -60,14 +60,6 @@ public class QRcodeTest {
 
     }
 
-
-    @Test
-    public void testImageSeed() {
-        Assertions.assertNotNull(qrcode.getImageSeed());
-        int imageSeed = Integer.parseInt(qrcode.getImageSeed());
-        assertTrue(imageSeed >= 0);
-        assertTrue(imageSeed < 101 );
-    }
     @Test
     public void testImageURL() {
         // Regex to check if the URL is valid
