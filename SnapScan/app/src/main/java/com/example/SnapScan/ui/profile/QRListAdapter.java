@@ -20,10 +20,10 @@ import com.example.SnapScan.model.QRcode;
 import java.util.ArrayList;
 
 public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListViewHolder> {
-    public ArrayList<QRcode> qrcodes;
+    public ArrayList<QRcode> qrCodes;
 
-    public QRListAdapter(ArrayList<QRcode> qrcodes) {
-        this.qrcodes = qrcodes;
+    public QRListAdapter(ArrayList<QRcode> userQrCodes) {
+        this.qrCodes = userQrCodes;
     }
 
 
@@ -36,7 +36,7 @@ public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListView
 
     @Override
     public void onBindViewHolder(@NonNull QRListViewHolder holder, int position) {
-        QRcode selected_qr = qrcodes.get(position);
+        QRcode selected_qr = qrCodes.get(position);
         holder.qrCode_name.setText(selected_qr.getName());
         holder.qrCode_score.setText(String.valueOf(selected_qr.getPoints()));
         selected_qr.loadImage(holder.qrCode_VR);
@@ -62,7 +62,7 @@ public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListView
 
     @Override
     public int getItemCount() {
-        return qrcodes.size();
+        return qrCodes.size();
     }
 
     public class QRListViewHolder extends RecyclerView.ViewHolder {

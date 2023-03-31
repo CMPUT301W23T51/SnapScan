@@ -213,11 +213,11 @@ public class PostScanFragment extends Fragment {
      */
     private void addToUserCollection(String comment, String documentName){
         db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("Users");
+        CollectionReference collectionReference = db.collection("users");
         HashMap<String, Object> userComment = new HashMap<>();
         userComment.put("Comment",comment);
         // Make the change here after to do is done
-        collectionReference.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("Scanned QRs").document(documentName).set(userComment)
+        collectionReference.document("Suvan").collection("Scanned QRs").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

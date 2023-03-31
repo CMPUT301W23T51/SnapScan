@@ -40,8 +40,6 @@ public class IndividualQRFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("QR Hash", this, (requestKey, result) -> {
             qrHash = result.getString("QR Hash");
         });
-        // Chnaging qr hash for testing
-        qrHash = "8b1f34fa1a7b68ca13d1830c3e247162b869e6555f70ad30b2119594ebb1e36f";
         displayQR(qrHash);
         Button back_button = view.findViewById(R.id.back_button);
         back_button.setOnClickListener(new View.OnClickListener() {
@@ -54,10 +52,10 @@ public class IndividualQRFragment extends Fragment {
     }
 
     /**
-     * Get the QRcode object from the database
-     * and set the views to the QRcode's attributes
+     * Get the QR code object from the database
+     * and set the views to the QR code's attributes
      *
-     * @param qrHash the hash of the QRcode
+     * @param qrHash the hash of the QR code
      */
     public void displayQR(String qrHash) {
         db = FirebaseFirestore.getInstance();
@@ -65,13 +63,13 @@ public class IndividualQRFragment extends Fragment {
         docRef.get().addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Failed to get QRcode as it does not exist in the database");
+                Log.d(TAG, "Failed to get QR Code as it does not exist in the database");
             }
         }).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 QRcode qr = documentSnapshot.toObject(QRcode.class);
-                Log.d(TAG, "Successfully got QRcode from database");
+                Log.d(TAG, "Successfully got QR code from database");
                 qrNameView = getView().findViewById(R.id.qr_name_placeholder);
                 qrNameView.setText(qr.getName());
                 qrScoreView = getView().findViewById(R.id.qr_score_placeholder);
