@@ -15,6 +15,8 @@ import com.example.SnapScan.R;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.databinding.FragmentProfileBinding;
+import com.example.SnapScan.ui.login.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFragment extends Fragment {
 
@@ -36,6 +38,7 @@ public class ProfileFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
+        // opens the leaderboard
         Button Leaderboard_button = binding.getRoot().findViewById(R.id.leaderboard_button);
         Leaderboard_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +48,19 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // Trying to implement the logout button
+        /*
+        Button logout = binding.getRoot().findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent login_intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(login_intent);
+            }
+        });
+
+         */
+
         return binding.getRoot();
     }
 
@@ -53,4 +69,5 @@ public class ProfileFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }

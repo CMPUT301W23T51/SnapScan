@@ -38,7 +38,7 @@ public class LoginActivity extends Activity {
     private ProgressBar progressBar;
     private TextView forgotPassword;
 
-    public String username;
+    public String username; // trying to pass it to main activity class
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -181,12 +181,11 @@ public class LoginActivity extends Activity {
         super.onStart();
         if (firebaseAuth.getCurrentUser() != null){
             Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+            // pass username to main activity class
             username = editTextLoginEmail.getText().toString();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("EXTRA_STRING", username);
             startActivity(intent);
-
-
 
         }
         else {
@@ -194,4 +193,7 @@ public class LoginActivity extends Activity {
         }
 
     }
+
+
+
 }
