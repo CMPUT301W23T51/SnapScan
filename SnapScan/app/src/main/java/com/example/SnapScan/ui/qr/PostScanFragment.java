@@ -3,13 +3,17 @@ package com.example.SnapScan.ui.qr;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.ContentValues.TAG;
 import static android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
+import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
 import static com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -41,9 +48,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * This fragment is used to display the data from the QR code
@@ -60,11 +71,26 @@ public class PostScanFragment extends Fragment {
     String QRHash;
     FirebaseFirestore db;
 
+    //initial values to save QrImage
+    ImageView selectedImage;
+    FirebaseStorage storage;
+    Uri imageUri;
+    Uri imageSave;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_post_scan, container, false);
 
+        //select QrImage to display on ImageView
+        selectedImage = root.findViewById(R.id.imageViewQrCode);
+        storage = FirebaseStorage.getInstance();
+        selectedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mGetContent.launch("image/*");
+            }
+        });
 
         // Check if location permission is already granted
         if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -103,9 +129,17 @@ public class PostScanFragment extends Fragment {
         // Photo Button to add a picture to the QR code
         Button addPhotoButton = root.findViewById(R.id.photo_button);
         addPhotoButton.setOnClickListener(view -> {
+            // Save photo to gallery
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.TITLE, "new image");
+            values.put(MediaStore.Images.Media.DESCRIPTION, "from camera");
+            imageSave = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            // Open camera and take photo
             Intent cameraIntent = new Intent(ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(EXTRA_OUTPUT, imageSave);
             startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-            //TODO: add code to save the image to the database
+
         });
 
         // Geolocation Button to add the location of the QR code
@@ -142,6 +176,8 @@ public class PostScanFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // upload QrImage to firebase storage
+                uploadImage();
                 db = FirebaseFirestore.getInstance();
                 // Check if the QR code already exists in the database
                 db.collection("QR").document(QRHash).get()
@@ -223,6 +259,37 @@ public class PostScanFragment extends Fragment {
                     }
                 });
     }
+
+    // method to get QrImage folder
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+        @Override
+        public void onActivityResult(Uri result) {
+            if (result != null){
+                selectedImage.setImageURI(result);
+                imageUri = result;
+            }
+
+        }
+    });
+
+    // method to upload QRImage to firebase storage
+    private void uploadImage() {
+        if (imageUri != null) {
+            StorageReference reference = storage.getReference().child("images/"+ UUID.randomUUID().toString());
+
+            reference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()){
+                        Toast.makeText(getContext(), "Upload Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
 
 }
 

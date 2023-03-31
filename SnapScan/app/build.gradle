@@ -34,6 +34,7 @@ android {
         unitTests.all {
             useJUnitPlatform()}
     }
+    buildToolsVersion '31.0.0'
 }
 
 dependencies {
@@ -46,6 +47,7 @@ dependencies {
     // Navigation Dependencies
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
 
     // Testing Dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
