@@ -1,5 +1,6 @@
 package com.example.SnapScan.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,15 @@ public class ProfileFragment extends Fragment {
             // Allow use to go back to profile when back button is pressed
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+        });
+
+        Button Leaderboard_button = binding.getRoot().findViewById(R.id.leaderboard_button);
+        Leaderboard_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),leaderboard.class);
+                startActivity(intent);
+            }
         });
 
         return binding.getRoot();
