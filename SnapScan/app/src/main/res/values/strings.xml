@@ -5,4 +5,6 @@
     <string name="title_qr">QR</string>
     <string name="title_profile">Profile</string>
     <string name="title_VR">Visual Representation of QR Code</string>
+    <string name="name_attr">Name :</string>
+    <string name="score_attr">Score :</string>
 </resources>

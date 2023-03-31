@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
-import com.example.SnapScan.R;
 import com.github.javafaker.Faker;
 import com.google.firebase.firestore.GeoPoint;
 import com.squareup.picasso.Picasso;
@@ -24,7 +23,7 @@ import java.util.Random;
  */
 public class QRcode {
 
-    private final String result;
+    private String result;
     private String hash;
     private String name;
     private int points;
@@ -41,9 +40,14 @@ public class QRcode {
         setImageURL();
     }
 
+    //Empty constructor for Firebase
+    public QRcode() {
+    }
+
     public String getImageURL() {
         return imageURL;
     }
+
     public void loadImage(ImageView imageView) {
         // Using Picasso to load the image from the URL
         try {
@@ -59,6 +63,7 @@ public class QRcode {
     /**
      * Set the image URL of the QR code
      * The image URL is generated using the image seed
+     *
      * @see <a href="https://picsum.photos">Picsum</a>
      * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
      */
@@ -66,7 +71,7 @@ public class QRcode {
         // Generate a random number between 1 and 100 for image seed
         int imageSeed = new Random().nextInt(100);
         this.imageURL = "https://picsum.photos/seed/" + imageSeed + "/400/275";
-                                                                                //Width/Height
+        //Width/Height
     }
 
     public String getHash() {

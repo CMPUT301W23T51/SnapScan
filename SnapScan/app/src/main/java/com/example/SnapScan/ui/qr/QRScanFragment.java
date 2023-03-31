@@ -61,7 +61,7 @@ public class QRScanFragment extends Fragment {
                 barcodeScannerView.setStatusText(result.getText());
                 barcodeScannerView.pause();
 
-                // Replace the current fragment with the PostScanFragment
+                // Replace the current fragment with the PostScanFragment and pass the scanned QR
                 Bundle data = new Bundle();
                 data.putString("Scanned Data", result.getText());
                 getParentFragmentManager().setFragmentResult("dataFromQR", data);
