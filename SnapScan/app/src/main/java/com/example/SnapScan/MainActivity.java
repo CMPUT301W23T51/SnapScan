@@ -14,6 +14,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    //public String username = getIntent().getStringExtra("EXTRA_STRING");
+
     private ActivityMainBinding binding;
 
     @Override
