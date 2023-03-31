@@ -1,15 +1,161 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView_qr_list"
+        android:layout_width="400dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
+        android:contentDescription="@string/title_VR"
+        android:src="@drawable/appicon" />
 
-    <TextView
-        android:id="@+id/trial"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/qr_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:layout_below="@+id/imageView_qr_list">
+
+        <TextView
+            android:id="@+id/qr_name_text"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Name:"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="info_layout" />
+
+        <TextView
+            android:id="@+id/qr_name_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Name"
+            android:maxLength="19"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/qr_name_text"
+            app:layout_constraintTop_toBottomOf="info_layout" />
+
+        <TextView
+            android:id="@+id/qr_score_text"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Score: "
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/qr_name_text" />
+
+        <TextView
+            android:id="@+id/qr_score_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="120dp"
+            android:hint="1000"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/qr_name_placeholder" />
+        <TextView
+            android:id="@+id/qr_latitude_text"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Latitude:"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qr_score_text" />
+
+        <TextView
+            android:id="@+id/qr_latitude_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="1000"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/qr_latitude_text"
+            app:layout_constraintTop_toBottomOf="@id/qr_score_placeholder" />
+        <TextView
+            android:id="@+id/qr_longitude_text"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Longitude:"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qr_latitude_text" />
+
+        <TextView
+            android:id="@+id/qr_longitude_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="1000"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/qr_longitude_text"
+            app:layout_constraintTop_toBottomOf="@id/qr_latitude_placeholder" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/qr_comment"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_above="@id/back_button"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:autofillHints="name"
+        android:hint="Comment"
+        android:inputType="textAutoCorrect" />
+
+    <Button
+        android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:clickable="false"
-        android:text="@string/app_name"
-        android:textSize="25sp" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="60dp"
+        android:text="Back" />
+
 
 </RelativeLayout>

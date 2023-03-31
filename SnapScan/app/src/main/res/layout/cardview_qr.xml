@@ -27,10 +27,10 @@
         <!--        to generate random text or images use tools:sample-->
         <TextView
             android:id="@+id/qr_list_name_text"
-            android:layout_width="0dp"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="Name: "
+            android:hint="Name:"
             android:padding="5dp"
             android:textColor="@android:color/black"
             android:textSize="25sp"
@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/qr_list_score_text"
-            android:layout_width="0dp"
+            android:layout_width="95dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Score: "
@@ -59,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textAlignment="center"
+            android:maxLength="7"
             android:hint="Name"
             android:padding="5dp"
             android:textColor="@android:color/black"
