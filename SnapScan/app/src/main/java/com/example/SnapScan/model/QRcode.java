@@ -31,13 +31,23 @@ public class QRcode {
     private String imageURL;
 
 
-    // Constructor for QR code which sets the hash, name, points, image seed and image URL
+    // Constructor for QR code which sets the hash, name, points and image URL based on the result
     public QRcode(String result) {
         this.result = result;
         setHash(result);
         setName();
         setPoints();
         setImageURL();
+    }
+
+    //Constructor for QR code which sets the hash, name, points and image URL passed as parameters
+    public QRcode(String result,String hash, String name, int points,GeoPoint location, String imageURL) {
+        this.hash = hash;
+        this.result = result;
+        this.geoPoint = location;
+        this.name = name;
+        this.points = points;
+        this.imageURL = imageURL;
     }
 
     //Empty constructor for Firebase
@@ -112,11 +122,11 @@ public class QRcode {
 
     // Getter and Setter for GeoPoint
     // Setters for GeoPoint is public as we will set it after asking for permission
-    public void setgeoPoint(Double latitude, Double longitude) {
+    public void setGeoPoint(Double latitude, Double longitude) {
         this.geoPoint = new GeoPoint(latitude, longitude);
     }
 
-    public GeoPoint getgeoPoint() {
+    public GeoPoint getGeoPoint() {
         return this.geoPoint;
     }
 

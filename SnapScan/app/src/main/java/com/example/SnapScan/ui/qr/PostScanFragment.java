@@ -71,6 +71,7 @@ public class PostScanFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
             String data = result.getString("Scanned Data");
             scannedQrCode = new QRcode(data);
+            //TODO: Check if the QR code is already in the database and set view accordingly
 
             //Loading the image into the ImageView
             ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
@@ -109,7 +110,7 @@ public class PostScanFragment extends Fragment {
                             .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                                 @Override
                                 public void onSuccess(Location location) {
-                                    scannedQrCode.setgeoPoint(location.getLatitude(), location.getLongitude());
+                                    scannedQrCode.setGeoPoint(location.getLatitude(), location.getLongitude());
                                     Toast.makeText(getContext(), "Location Saved Successfully", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -188,7 +189,14 @@ public class PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the QR Object to the database
-        collectionReference.document(documentName).set(scannedQrCode)
+        HashMap<String, Object> qrData = new HashMap<>();
+        qrData.put("name", scannedQrCode.getName());
+        qrData.put("points", scannedQrCode.getPoints());
+        qrData.put("result", scannedQrCode.getResult());
+        qrData.put("hash", scannedQrCode.getHash());
+        qrData.put("imageURL", scannedQrCode.getImageURL());
+        qrData.put("geoPoint", scannedQrCode.getGeoPoint());
+        collectionReference.document(documentName).set(qrData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

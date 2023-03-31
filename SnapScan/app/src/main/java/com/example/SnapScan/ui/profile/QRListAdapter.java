@@ -41,7 +41,7 @@ public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListView
         holder.qrCode_score.setText(String.valueOf(selected_qr.getPoints()));
         selected_qr.loadImage(holder.qrCode_VR);
 
-        // CLick lister for the card view to open a fragment with the qr code full information
+        // Click lister for the card view to open a fragment with the qr code full information
         holder.qrCode_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +50,7 @@ public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListView
                 // send the qr code hash to the fragment so that we can retrieve the qr code from the database
                 Bundle data = new Bundle();
                 data.putString("QR Hash", selected_qr.getHash());
-                fragmentManager.setFragmentResult("QR Hash", data);
+                fragmentManager.setFragmentResult("Hash", data);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 IndividualQRFragment newFragment = new IndividualQRFragment();
                 fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, newFragment);

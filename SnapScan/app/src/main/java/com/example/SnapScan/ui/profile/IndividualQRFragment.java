@@ -37,7 +37,7 @@ public class IndividualQRFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_individual_qr, container, false);
 
         // Receive the QR hash from the QRListFragment
-        getParentFragmentManager().setFragmentResultListener("QR Hash", this, (requestKey, result) -> {
+        getParentFragmentManager().setFragmentResultListener("Hash", this, (requestKey, result) -> {
             qrHash = result.getString("QR Hash");
         });
         displayQR(qrHash);
@@ -75,9 +75,9 @@ public class IndividualQRFragment extends Fragment {
                 qrScoreView = getView().findViewById(R.id.qr_score_placeholder);
                 qrScoreView.setText(String.valueOf(qr.getPoints()));
                 qrLatView = getView().findViewById(R.id.qr_latitude_placeholder);
-                qrLatView.setText(String.valueOf(qr.getgeoPoint().getLatitude()));
+                qrLatView.setText(String.valueOf(qr.getGeoPoint().getLatitude()));
                 qrLongView = getView().findViewById(R.id.qr_longitude_placeholder);
-                qrLongView.setText(String.valueOf(qr.getgeoPoint().getLongitude()));
+                qrLongView.setText(String.valueOf(qr.getGeoPoint().getLongitude()));
                 qrCommentView = getView().findViewById(R.id.qr_comment);
                 qrCommentView.setText(qr.getImageURL());
                 // TODO: get proper comments
