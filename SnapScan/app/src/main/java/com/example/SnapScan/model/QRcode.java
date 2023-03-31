@@ -1,9 +1,16 @@
 package com.example.SnapScan.model;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 
+import com.example.SnapScan.R;
 import com.github.javafaker.Faker;
 import com.google.firebase.firestore.GeoPoint;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -36,6 +43,17 @@ public class QRcode {
 
     public String getImageURL() {
         return imageURL;
+    }
+    public void loadImage(ImageView imageView) {
+        // Using Picasso to load the image from the URL
+        try {
+            Picasso.get()
+                    .load(getImageURL())
+                    .into((ImageView) imageView);
+        } catch (Exception e) {
+            // Should display app Icon if the QR code does not have an image
+            Log.d(TAG, "Unable to Fetch Visual Representation : " + e.getMessage());
+        }
     }
 
     /**

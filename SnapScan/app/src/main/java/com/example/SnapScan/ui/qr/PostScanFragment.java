@@ -73,15 +73,17 @@ public class PostScanFragment extends Fragment {
             scannedQrCode = new QRcode(data);
 
 
-            // Using Picasso to load the image from the URL
-            try {
-                Picasso.get()
-                        .load(scannedQrCode.getImageURL())
-                        .into((ImageView) root.findViewById(R.id.imageViewQrCode));
-            } catch (Exception e) {
-                // Should display app Icon if the QR code does not have an image
-                Log.d(TAG, "Unable to Fetch Visual Representation : " + e.getMessage());
-            }
+//            // Using Picasso to load the image from the URL
+//            try {
+//                Picasso.get()
+//                        .load(scannedQrCode.getImageURL())
+//                        .into((ImageView) root.findViewById(R.id.imageViewQrCode));
+//            } catch (Exception e) {
+//                // Should display app Icon if the QR code does not have an image
+//                Log.d(TAG, "Unable to Fetch Visual Representation : " + e.getMessage());
+//            }
+            ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
+            scannedQrCode.loadImage(qr_visual);
 
 
             //Setting up the  views to display the data
