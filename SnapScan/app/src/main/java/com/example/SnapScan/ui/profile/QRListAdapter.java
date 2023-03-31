@@ -1,5 +1,6 @@
 package com.example.SnapScan.ui.profile;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,10 @@ public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListView
             public void onClick(View v) {
                 // open a fragment with qr code information
                 FragmentManager fragmentManager = ((MainActivity) v.getContext()).getSupportFragmentManager();
+                // send the qr code hash to the fragment so that we can retrieve the qr code from the database
+                Bundle data = new Bundle();
+                data.putString("QR Hash", selected_qr.getHash());
+                fragmentManager.setFragmentResult("QR Hash", data);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 IndividualQRFragment newFragment = new IndividualQRFragment();
                 fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, newFragment);
