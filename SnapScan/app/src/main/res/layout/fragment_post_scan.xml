@@ -9,7 +9,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:clickable="false"
-        android:contentDescription="Image of QR Code"
+        android:contentDescription="@string/title_VR"
         android:src="@drawable/appicon" />
 
     <TextView
