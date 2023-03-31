@@ -111,7 +111,6 @@ public class PostScanFragment extends Fragment {
                                 public void onSuccess(Location location) {
                                     scannedQrCode.setgeoPoint(location.getLatitude(), location.getLongitude());
                                     Toast.makeText(getContext(), "Location Saved Successfully", Toast.LENGTH_SHORT).show();
-                                    System.out.println(scannedQrCode.getgeoPoint());
                                 }
                             })
                             .addOnFailureListener(getActivity(), new OnFailureListener() {
@@ -217,7 +216,7 @@ public class PostScanFragment extends Fragment {
         HashMap<String, Object> userComment = new HashMap<>();
         userComment.put("Comment",comment);
         // Make the change here after to do is done
-        collectionReference.document("Suvan").collection("Scanned QRs").document(documentName).set(userComment)
+        collectionReference.document("Suvan").collection("scanned").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
