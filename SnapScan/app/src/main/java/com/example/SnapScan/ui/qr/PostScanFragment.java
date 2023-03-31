@@ -73,8 +73,8 @@ public class PostScanFragment extends Fragment {
 
     //initial values to save QrImage
     ImageView selectedImage;
-    FirebaseStorage storage;
-    Uri imageUri;
+    public FirebaseStorage storage;
+    public Uri imageUri;
     Uri imageSave;
 
 
@@ -273,7 +273,7 @@ public class PostScanFragment extends Fragment {
     });
 
     // method to upload QRImage to firebase storage
-    private void uploadImage() {
+    public void uploadImage() {
         if (imageUri != null) {
             StorageReference reference = storage.getReference().child("images/"+ UUID.randomUUID().toString());
 
