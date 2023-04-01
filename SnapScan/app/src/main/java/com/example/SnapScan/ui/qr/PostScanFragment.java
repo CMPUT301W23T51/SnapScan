@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import static android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
 import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
 import static com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
+import static com.example.SnapScan.ui.profile.QRListFragment.userQrList;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -185,17 +186,24 @@ public class PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the QR Object to the database
-        collectionReference.document(documentName).set(scannedQrCode)
+        HashMap<String, Object> qrData = new HashMap<>();
+        qrData.put("name", scannedQrCode.getName());
+        qrData.put("points", scannedQrCode.getPoints());
+        qrData.put("result", scannedQrCode.getResult());
+        qrData.put("hash", scannedQrCode.getHash());
+        qrData.put("imageURL", scannedQrCode.getImageURL());
+        qrData.put("geoPoint", scannedQrCode.getGeoPoint());
+        collectionReference.document(documentName).set(qrData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added successfully!");
+                        Log.d(TAG, "Data has been added successfully to the Database!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e);
+                        Log.d(TAG, "Data could not be added to the firebase!" + e);
                     }
                 });
 
@@ -217,13 +225,14 @@ public class PostScanFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added successfully!");
+                        Log.d(TAG, "QR code has been added to the user's collection!");
+                        userQrList.add(scannedQrCode);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e);
+                        Log.d(TAG, "Data could not be added to the user collection!" + e);
                     }
                 });
     }

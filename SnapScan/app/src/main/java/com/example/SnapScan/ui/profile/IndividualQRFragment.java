@@ -78,9 +78,9 @@ public class IndividualQRFragment extends Fragment {
                 qrLatView.setText(String.valueOf(qr.getGeoPoint().getLatitude()));
                 qrLongView = getView().findViewById(R.id.qr_longitude_placeholder);
                 qrLongView.setText(String.valueOf(qr.getGeoPoint().getLongitude()));
+                // TODO: get proper comments
                 qrCommentView = getView().findViewById(R.id.qr_comment);
                 qrCommentView.setText(qr.getImageURL());
-                // TODO: get proper comments
                 qrImage = getView().findViewById(R.id.imageView_qr);
                 qr.loadImage(qrImage);
             }

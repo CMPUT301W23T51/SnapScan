@@ -27,7 +27,7 @@ public class ProfileFragment extends Fragment {
         // Open the QRListFragment when the button is clicked
         Button MyQrsButton = binding.myQrButton;
         MyQrsButton.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, new QRListFragment());
             // Allow use to go back to profile when back button is pressed
