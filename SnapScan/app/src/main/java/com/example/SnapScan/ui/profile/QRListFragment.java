@@ -37,6 +37,9 @@ public class QRListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerView_qr_list);
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         mRecyclerView.setHasFixedSize(true);
+
+        // How to hide the bottom navigation bar when scrolling
+        // https://stackoverflow.com/questions/44777869/hide-show-bottomnavigationview-on-scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {

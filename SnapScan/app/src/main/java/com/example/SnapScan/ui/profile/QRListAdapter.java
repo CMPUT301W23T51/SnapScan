@@ -53,6 +53,7 @@ public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListView
                 // send the qr code hash to the fragment so that we can retrieve the qr code from the database
                 Bundle data = new Bundle();
                 data.putString("QR Hash", selected_qr.getHash());
+                System.out.println("QR Hash From : " + selected_qr.getHash());
                 fragmentManager.setFragmentResult("Hash", data);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 IndividualQRFragment newFragment = new IndividualQRFragment();

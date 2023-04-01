@@ -186,14 +186,7 @@ public class PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the QR Object to the database
-        HashMap<String, Object> qrData = new HashMap<>();
-        qrData.put("name", scannedQrCode.getName());
-        qrData.put("points", scannedQrCode.getPoints());
-        qrData.put("result", scannedQrCode.getResult());
-        qrData.put("hash", scannedQrCode.getHash());
-        qrData.put("imageURL", scannedQrCode.getImageURL());
-        qrData.put("geoPoint", scannedQrCode.getGeoPoint());
-        collectionReference.document(documentName).set(qrData)
+        collectionReference.document(documentName).set(scannedQrCode)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

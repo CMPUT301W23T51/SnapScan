@@ -3,6 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/progressBar_qr_individual"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
+
     <ImageView
         android:id="@+id/imageView_qr"
         android:layout_width="400dp"
@@ -18,118 +25,57 @@
         android:layout_height="215dp"
         android:layout_below="@+id/imageView_qr">
 
-        <TextView
-            android:id="@+id/qr_name_text"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/name_attr"
-            android:padding="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/qr_score_text"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/qr_name_placeholder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="10dp"
             android:hint="Name"
             android:maxLength="19"
             android:padding="5dp"
             android:textAlignment="center"
             android:textColor="@android:color/black"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@+id/qr_score_placeholder"
+            android:textSize="35sp"
             android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/qr_score_placeholder"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/qr_name_text" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/qr_score_text"
-            android:layout_width="95dp"
+            android:id="@+id/qr_result_placeholder"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/score_attr"
+            android:layout_margin="10dp"
+            android:hint="Result"
+            android:maxLength="19"
             android:padding="5dp"
+            android:textAlignment="center"
             android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/qr_name_text" />
+            android:textSize="35sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
         <TextView
             android:id="@+id/qr_score_placeholder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="120dp"
+            android:layout_margin="10dp"
             android:hint="1000"
+            android:maxLength="19"
             android:padding="5dp"
             android:textAlignment="center"
             android:textColor="@android:color/black"
-            android:textSize="25sp"
+            android:textSize="35sp"
             android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@+id/qr_name_placeholder"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/qr_name_placeholder" />
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/qr_latitude_text"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="Latitude:"
-            android:padding="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/qr_score_text" />
-
-        <TextView
-            android:id="@+id/qr_latitude_placeholder"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="1000"
-            android:padding="5dp"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/qr_latitude_text"
-            app:layout_constraintTop_toBottomOf="@id/qr_score_placeholder" />
-
-        <TextView
-            android:id="@+id/qr_longitude_text"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="Longitude:"
-            android:padding="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/qr_latitude_text" />
-
-        <TextView
-            android:id="@+id/qr_longitude_placeholder"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="1000"
-            android:padding="5dp"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/qr_longitude_text"
-            app:layout_constraintTop_toBottomOf="@id/qr_latitude_placeholder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -139,10 +85,10 @@
         android:layout_height="100dp"
         android:layout_above="@id/back_button"
         android:layout_alignParentStart="true"
-        android:layout_margin="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:textSize="20sp"
         android:layout_marginBottom="10dp"
         android:autofillHints="name"
         android:hint="Comment" />

@@ -20,6 +20,7 @@ import com.example.SnapScan.model.QRcode;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,16 +31,23 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
     FirebaseFirestore db;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Good Site for Splash Screen:I used this site to create the splash screen.
+        //https://proandroiddev.com/splash-screen-in-android-3bd9552b92a5#6e92
         SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // We are populating the qrList in the MainActivity as it reduces the loading time
+        // of the QRListFragment
+        // https://stackoverflow.com/questions/68023340/custom-object-retrieved-from-firebase-always-has-null-attributes
+
         populateUserQRList();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         // Alternatively, you can use the Navigation to get the NavController
-    // NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        // NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_activity_main);
         NavController navController = navHostFragment.getNavController();
@@ -60,17 +68,20 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method will populate the qrList with the qr codes that the user has scanned
+     * * @helperMethod _addToQRList
      */
     public void populateUserQRList() {
+
         // Get a Fire store instance
         db = FirebaseFirestore.getInstance();
         ArrayList<String> qrHashList = new ArrayList<>();
-        db.collectionGroup("Scanned QRs").get()
+        CollectionReference collectionReference = db.collection("users").document("suvan5@gmail.com").collection("Scanned QRs");
+        collectionReference.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         // Log the Success
-                        Log.d("QRListFragment", "Successfully retrieved the list of qr codes that the user has scanned");
+                        Log.d(TAG, "Successfully retrieved the list of QR codes that the user has scanned");
                         // Get the list of qr codes that the user has scanned
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             qrHashList.add(document.getId());
@@ -80,7 +91,14 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This method will add the qr codes to the qrList
+     *
+     * @param qrHashList the list of qr hashes that the user has scanned
+     * @param db         the FireStore instance
+     */
     private void _addToQRList(ArrayList<String> qrHashList, FirebaseFirestore db) {
+        // For each qr hash in the list, get the qr code from the database
         for (String qrHash : qrHashList) {
             DocumentReference docRef = db.collection("QR").document(qrHash);
             docRef.get().addOnFailureListener(new OnFailureListener() {
@@ -91,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             }).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    // Convert the hash to a QR code object
                     QRcode qrCode = documentSnapshot.toObject(QRcode.class);
                     userQrList.add(qrCode);
                     Log.d(TAG, "Successfully added QR code to the list");

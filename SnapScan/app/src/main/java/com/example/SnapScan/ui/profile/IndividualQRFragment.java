@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,20 +28,28 @@ public class IndividualQRFragment extends Fragment {
     private String qrHash;
     private TextView qrNameView;
     private TextView qrScoreView;
-    private TextView qrLatView;
-    private TextView qrLongView;
+    private TextView qrResultView;
     private TextView qrCommentView;
     private ImageView qrImage;
+    private ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_individual_qr, container, false);
+        progressBar = view.findViewById(R.id.progressBar_qr_individual);
 
         // Receive the QR hash from the QRListFragment
         getParentFragmentManager().setFragmentResultListener("Hash", this, (requestKey, result) -> {
             qrHash = result.getString("QR Hash");
+            System.out.println("QR Hash to: " + qrHash);
+            // Important to use DisplayQR line here, otherwise the QR code will not be displayed
+            // as the hash is not received in time if it is called outside of this method
+            displayQR(qrHash);
+            progressBar.setVisibility(View.INVISIBLE);
+
         });
-        displayQR(qrHash);
+        //Creating test QR hash
+//        qrHash = "001f189d1b61ba8790d1736e297550e779ab9183033d38628c551406ab8a8ee2";
         Button back_button = view.findViewById(R.id.back_button);
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +57,7 @@ public class IndividualQRFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
         return view;
     }
 
@@ -69,20 +79,18 @@ public class IndividualQRFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 QRcode qr = documentSnapshot.toObject(QRcode.class);
-                Log.d(TAG, "Successfully got QR code from database");
+                Log.d("IndividualQRFragment", "Successfully Made QR Code");
+                qrImage = getView().findViewById(R.id.imageView_qr);
+                qr.loadImage(qrImage);
                 qrNameView = getView().findViewById(R.id.qr_name_placeholder);
                 qrNameView.setText(qr.getName());
+                qrResultView = getView().findViewById(R.id.qr_result_placeholder);
+                qrResultView.setText(qr.getResult());
                 qrScoreView = getView().findViewById(R.id.qr_score_placeholder);
                 qrScoreView.setText(String.valueOf(qr.getPoints()));
-                qrLatView = getView().findViewById(R.id.qr_latitude_placeholder);
-                qrLatView.setText(String.valueOf(qr.getGeoPoint().getLatitude()));
-                qrLongView = getView().findViewById(R.id.qr_longitude_placeholder);
-                qrLongView.setText(String.valueOf(qr.getGeoPoint().getLongitude()));
                 // TODO: get proper comments
                 qrCommentView = getView().findViewById(R.id.qr_comment);
                 qrCommentView.setText(qr.getImageURL());
-                qrImage = getView().findViewById(R.id.imageView_qr);
-                qr.loadImage(qrImage);
             }
         });
     }
