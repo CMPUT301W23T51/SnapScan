@@ -87,6 +87,8 @@ public class QRScanFragment extends Fragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         } else {
             capture.onResume();
+            bottomNav.setVisibility(View.INVISIBLE);
+
         }
     }
 
@@ -94,12 +96,15 @@ public class QRScanFragment extends Fragment {
     public void onPause() {
         super.onPause();
         capture.onPause();
+        bottomNav.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         capture.onDestroy();
+        bottomNav.setVisibility(View.VISIBLE);
+
     }
 
     @Override
