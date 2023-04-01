@@ -1,6 +1,7 @@
 package com.example.SnapScan;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -10,11 +11,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.SnapScan.databinding.ActivityMainBinding;
+import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-
-    //public String username = getIntent().getStringExtra("EXTRA_STRING");
 
     private ActivityMainBinding binding;
 

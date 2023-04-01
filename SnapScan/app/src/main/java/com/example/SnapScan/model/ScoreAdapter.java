@@ -76,6 +76,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         }
     }
 
+
     @Override
     public int getItemCount() {
         return mScores.size();

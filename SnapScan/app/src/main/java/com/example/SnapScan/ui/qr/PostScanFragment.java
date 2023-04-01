@@ -29,6 +29,8 @@ import androidx.navigation.Navigation;
 
 import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
+import com.example.SnapScan.ui.profile.Player;
+import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationTokenSource;
@@ -50,6 +52,8 @@ import java.util.HashMap;
  */
 
 public class PostScanFragment extends Fragment {
+
+    public String uname = ProfileFragment.username;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
     private final int CAMERA_REQUEST_CODE = 103;
@@ -157,6 +161,10 @@ public class PostScanFragment extends Fragment {
                                     EditText comment = root.findViewById(R.id.editText_qr_comment);
 
                                     addToUserCollection(comment.getText().toString(), QRHash);
+
+                                    //Player player = new Player(uname, scannedQrCode.getPoints());
+                                    //player.update();
+
                                 } else {
                                     Log.d(TAG, "Error getting document: ", task.getException());
                                 }
@@ -220,11 +228,11 @@ public class PostScanFragment extends Fragment {
      */
     private void addToUserCollection(String comment, String documentName){
         db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("Users");
+        CollectionReference collectionReference = db.collection("users");
         HashMap<String, Object> userComment = new HashMap<>();
         userComment.put("Comment",comment);
         // Make the change here after to do is done
-        collectionReference.document("akwrgbpiyBPHzTUlgY4dNHFP3NN2").collection("Scanned QRs").document(documentName).set(userComment)
+        collectionReference.document(uname).collection("Scanned QRs").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

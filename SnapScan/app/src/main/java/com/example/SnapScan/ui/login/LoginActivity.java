@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.SnapScan.MainActivity;
 import com.example.SnapScan.R;
+import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -160,6 +161,11 @@ public class LoginActivity extends Activity {
 
 
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                    // pass username to profile
+                    username = editTextLoginEmail.getText().toString();
+                    ProfileFragment.username = username;
+
                     finish();
 
                 } else {
@@ -181,10 +187,12 @@ public class LoginActivity extends Activity {
         super.onStart();
         if (firebaseAuth.getCurrentUser() != null){
             Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
-            // pass username to main activity class
+
+            // pass username to profile
             username = editTextLoginEmail.getText().toString();
+            ProfileFragment.username = username;
+
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("EXTRA_STRING", username);
             startActivity(intent);
 
         }

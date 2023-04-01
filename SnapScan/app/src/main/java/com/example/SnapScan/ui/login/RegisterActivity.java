@@ -22,13 +22,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.SnapScan.MainActivity;
 import com.example.SnapScan.R;
+import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -201,7 +204,7 @@ public class RegisterActivity extends Activity {
                                 userId = firebaseAuth.getCurrentUser().getUid();
 
                                 //DocumentReference helps to refer to a particular document inside the fireStore
-                                DocumentReference documentReference = firebaseFirestore.collection("users").document(editTextRegisterName.getText().toString());
+                                DocumentReference documentReference = firebaseFirestore.collection("users").document(EditTextRegisterEmail.getText().toString());
 
                                 //using hashmap
                                 Map<String , Object> user = new HashMap<>();
@@ -212,6 +215,10 @@ public class RegisterActivity extends Activity {
                                 //user.put("gender",textGender);
                                 user.put("email",textEmail);
 
+                                // initializing total qr's scanned and points to 0
+                                user.put("qr's scanned", "0");
+                                user.put("total points", "0");
+
                                 //inserting data to the fireStore cloud database
                                 documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -221,6 +228,8 @@ public class RegisterActivity extends Activity {
                                     }
                                 });
 
+                                String username = textEmail;
+                                ProfileFragment.username = username;
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
