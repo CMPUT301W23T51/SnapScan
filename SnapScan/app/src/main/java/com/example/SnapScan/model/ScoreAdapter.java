@@ -69,10 +69,12 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         holder.mNameTextView.setText(currentScore.getName());
         holder.mPointsTextView.setText(String.valueOf(currentScore.getPoints()));
         holder.mRankTextView.setText(String.valueOf(position + 1));
-        if (currentScore.getName().equals(mClickedUsername)) {
-            holder.itemView.setBackgroundColor(Color.LTGRAY);
-        } else {
-            holder.itemView.setBackgroundColor(Color.WHITE);
+        if (mClickedUsername != null && currentScore.getName() != null) {
+            if (currentScore.getName().equals(mClickedUsername)) {
+                holder.itemView.setBackgroundColor(Color.LTGRAY);
+            } else {
+                holder.itemView.setBackgroundColor(Color.WHITE);
+            }
         }
     }
 

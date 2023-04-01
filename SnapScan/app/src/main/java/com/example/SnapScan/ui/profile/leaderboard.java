@@ -66,7 +66,7 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
 
 //         Retrieve scores data from Firestore and rank in ascending order
         db.collection("QR")
-                .orderBy("Points", Query.Direction.ASCENDING) // Sort by "points" field in ascending order
+                .orderBy("points", Query.Direction.ASCENDING) // Sort by "points" field in ascending order
                 .get() // Get the query results
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -75,8 +75,8 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Convert each document to a Score object and add it to the list
                                 Score score = new Score(
-                                        document.getString("Name"),
-                                        document.getString("Points"));
+                                        document.getString("name"),
+                                        document.getLong("points"));
                                 mScoresList.add(score);
                             }
                             // Sort the scores list in ascending order based on the "Points" attribute
@@ -104,7 +104,7 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
                 String searchQuery = searchEditText.getText().toString().trim();
                 // Query the Firestore collection for documents where the "Name" field matches the search query
                 db.collection("QR")
-                        .whereEqualTo("Name", searchQuery)
+                        .whereEqualTo("name", searchQuery)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -116,8 +116,8 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         // Convert each document to a Score object and add it to the list
                                         Score score = new Score(
-                                                document.getString("Name"),
-                                                document.getString("Points"));
+                                                document.getString("name"),
+                                                document.getLong("points"));
                                         mScoresList.add(score);
                                     }
                                     // Sort the scores list in ascending order based on the "Points" attribute

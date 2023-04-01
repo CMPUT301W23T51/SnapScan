@@ -4,11 +4,17 @@ public class Score {
     private String mName;
     private Long mPoints;
     private int rank;
-    public Score() {}
-
+    public Score(String name, String points) {}
+/*
     public Score(String name, String points) {
         mName = name;
         mPoints = Long.valueOf(points);
+    }
+*/
+
+    public Score(String name, Long points) {
+        mName = name;
+        mPoints = points;
     }
 
     public String getName() {

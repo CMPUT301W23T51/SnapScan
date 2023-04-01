@@ -216,8 +216,11 @@ public class RegisterActivity extends Activity {
                                 user.put("email",textEmail);
 
                                 // initializing total qr's scanned and points to 0
-                                user.put("qr's scanned", "0");
-                                user.put("total points", "0");
+                                user.put("QrScanned", 0);
+                                user.put("TotalPoints", 0);
+
+                                // adding device id to database
+                                user.put("deviceID", userId);
 
                                 //inserting data to the fireStore cloud database
                                 documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
