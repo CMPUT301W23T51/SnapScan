@@ -65,20 +65,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             return;
         }
         mMap.setMyLocationEnabled(true);
-        // Set up location listener to update user's current location on the map
+// Set up location listener to update user's current location on the map
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        // Retrieve QR codes with location attributes from Firestore
+// Retrieve QR codes with location attributes from Firestore
         FirebaseFirestore.getInstance().collection("QR")
-                .whereEqualTo("geoPoint", true)
+                .whereEqualTo("geoPoint",true)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             QRcode qrCode = document.toObject(QRcode.class);
                             qrCodes.add(qrCode);
+                            // Convert latitude and longitude values from N/S and W/E format to positive/negative format
+                            double latitude = qrCode.getgeoPoint().getLatitude();
+                            double longitude = qrCode.getgeoPoint().getLongitude();
+                            if (qrCode.getgeoPoint() != null) {
+                                String latStr = String.valueOf(qrCode.getgeoPoint().getLatitude());
+                                String lonStr = String.valueOf(qrCode.getgeoPoint().getLongitude());
+                                if (latStr.endsWith("S")) {
+                                    latitude *= -1;
+                                }
+                                if (lonStr.endsWith("W")) {
+                                    longitude *= -1;
+                                }
+                                if (latStr.endsWith("N")) {
+                                    latitude *= 1;
+                                }
+                                if (lonStr.endsWith("E")) {
+                                    longitude *= 1;
+                                }
+                            }
                             // Add a marker for each QR code with location attribute within 2km of the user's current location
-                            if (qrCode.getgeoPoint() != null && distance(qrCode.getgeoPoint().getLatitude(), qrCode.getgeoPoint().getLongitude(), locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude(), locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude()) <= 2) {
-                                LatLng latLng = new LatLng(qrCode.getgeoPoint().getLatitude(), qrCode.getgeoPoint().getLongitude());
+                            if (qrCode.getgeoPoint() != null && distance(latitude, longitude, locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude(), locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude()) <= 5) {
+                                LatLng latLng = new LatLng(latitude, longitude);
                                 Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(qrCode.getName()));
                                 marker.setTag(document.getId());
                             }
@@ -87,6 +106,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                         Log.d("MapFragment", "Error getting documents: ", task.getException());
                     }
                 });
+
+
+
     }
 
 
