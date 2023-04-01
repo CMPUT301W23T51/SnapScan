@@ -2,6 +2,7 @@ package com.example.SnapScan.ui.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -18,17 +19,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class QRListFragment extends Fragment {
     public static ArrayList<QRcode> userQrList = new ArrayList<>();
     public static boolean dataLoaded;
     protected RecyclerView mRecyclerView;
-    FirebaseFirestore db;
     BottomNavigationView bottomNavigationView;
 
 
@@ -38,10 +37,6 @@ public class QRListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerView_qr_list);
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         mRecyclerView.setHasFixedSize(true);
-        // Set the swipe controller
-        QRListSwipeController swipeController = new QRListSwipeController();
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
-        itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         // How to hide the bottom navigation bar when scrolling
         // https://stackoverflow.com/questions/44777869/hide-show-bottomnavigationview-on-scroll
@@ -70,6 +65,8 @@ public class QRListFragment extends Fragment {
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setAdapter(qrListAdapter);
             progressBar.setVisibility(View.INVISIBLE);
+            // Set the swipe controller
+            setupSwipeController();
             return view;
         } else {
             // Chances of this code being executed are infinitesimally low as the data is loaded
@@ -83,6 +80,60 @@ public class QRListFragment extends Fragment {
             navController.navigate(R.id.navigation_profile);
         }
         return view;
+    }
+
+    private void setupSwipeController() {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            //Set Boundaries for the swipe
+            public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+                return 0.7f;
+            }
+
+            @Override
+            public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+                if (MotionEvent.ACTION_CANCEL == 0 || MotionEvent.ACTION_UP == 0) {
+                    return 0;
+                }
+                return super.convertToAbsoluteDirection(flags, layoutDirection);
+            }
+
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // Get the position of the item that was swiped
+                int position = viewHolder.getAdapterPosition();
+                // Get the QR code that was swiped
+                QRcode qrCode = userQrList.get(position);
+                // Remove the QR code from the list
+                userQrList.remove(position);
+
+                // Notify the adapter that the item was removed
+                mRecyclerView.getAdapter().notifyItemRemoved(position);
+                Snackbar.make(mRecyclerView, "QR code " + qrCode.getName() + " deleted", Snackbar.LENGTH_LONG)
+                        .setTextColor(getResources().getColor(R.color.ComplementaryBlueLight))
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // Add the QR code back to the list
+                                userQrList.add(position, qrCode);
+                                // Notify the adapter that the item was added
+                                mRecyclerView.getAdapter().notifyItemInserted(position);
+                            }
+                        }).show();
+
+                // Delete the QR code from the database
+                // FirebaseFirestore.getInstance().collection("QRcodes").document(qrCode.getQrCodeId()).delete();
+            }
+
+        });
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
     }
 
     @Override
