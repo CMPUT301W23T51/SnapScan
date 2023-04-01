@@ -71,11 +71,13 @@ public class MainActivity extends AppCompatActivity {
      * * @helperMethod _addToQRList
      */
     public void populateUserQRList() {
+        //TODO: Change this to the user
+        String user = "suvan5@gmail.com";
 
         // Get a Fire store instance
         db = FirebaseFirestore.getInstance();
         ArrayList<String> qrHashList = new ArrayList<>();
-        CollectionReference collectionReference = db.collection("users").document("suvan5@gmail.com").collection("Scanned QRs");
+        CollectionReference collectionReference = db.collection("users").document(user).collection("Scanned QRs");
         collectionReference.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

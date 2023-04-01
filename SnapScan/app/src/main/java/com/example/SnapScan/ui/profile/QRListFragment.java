@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,10 @@ public class QRListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerView_qr_list);
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         mRecyclerView.setHasFixedSize(true);
+        // Set the swipe controller
+        QRListSwipeController swipeController = new QRListSwipeController();
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         // How to hide the bottom navigation bar when scrolling
         // https://stackoverflow.com/questions/44777869/hide-show-bottomnavigationview-on-scroll
