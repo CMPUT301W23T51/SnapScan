@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.LoginActivity"
+    android:background="@color/purple_200">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:id="@+id/TextView_login"
+            android:text="Please enter your information"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TextView_loginEmail"
+            android:layout_below="@id/TextView_login"
+            android:text="Email"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="3dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_login_email"
+            android:inputType="textEmailAddress"
+            android:layout_below="@id/TextView_loginEmail"
+            android:hint="Enter Your email"
+            android:padding="10dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TextView_loginPassword"
+            android:layout_below="@id/TextView_loginEmail"
+            android:text="Password"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="3dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_loginPassword"
+            android:inputType="textPassword"
+            android:layout_below="@id/TextView_loginPassword"
+            android:hint="Enter Your Password"
+            android:padding="10dp"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Button_login1"
+            android:text="LOGIN"
+            android:layout_below="@+id/TextView_loginPassword"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:backgroundTint="@color/purple_200"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:elevation="5dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot password?"
+            android:layout_below="@+id/button_register"
+            android:layout_marginTop="12dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="15dp"
+            android:id="@+id/ForgotPassword"/>
+
+        <Button
+            android:id="@+id/button_register"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/Button_login1"
+            android:layout_marginLeft="89dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="70dp"
+            android:backgroundTint="@color/purple_200"
+            android:outlineAmbientShadowColor="@color/black"
+            android:text="Haven't registered?"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+</ScrollView>

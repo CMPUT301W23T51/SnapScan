@@ -29,6 +29,7 @@ import androidx.navigation.Navigation;
 
 import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
+import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationTokenSource;
@@ -37,7 +38,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -51,12 +54,15 @@ import java.util.HashMap;
 
 public class PostScanFragment extends Fragment {
 
+    public String uname = ProfileFragment.username;
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
     private final int CAMERA_REQUEST_CODE = 103;
     FusedLocationProviderClient fusedLocationProviderClient;
     QRcode scannedQrCode;
     String QRHash;
     FirebaseFirestore db;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_post_scan, container, false);
@@ -150,6 +156,10 @@ public class PostScanFragment extends Fragment {
                                     EditText comment = root.findViewById(R.id.editText_qr_comment);
 
                                     addToUserCollection(comment.getText().toString(), QRHash);
+                                    updatePlayerTotals();
+                                    //Player player = new Player(uname, scannedQrCode.getPoints());
+                                    //player.update();
+
                                 } else {
                                     Log.d(TAG, "Error getting document: ", task.getException());
                                 }
@@ -183,7 +193,6 @@ public class PostScanFragment extends Fragment {
      *
      * @param documentName the name of the document to be added to the database
      * @see <a href=https://firebase.google.com/docs/firestore/manage-data/add-data?hl=en </a>
-     *
      */
     private void addQRToFirebase(String documentName) {
         db = FirebaseFirestore.getInstance();
@@ -212,19 +221,20 @@ public class PostScanFragment extends Fragment {
 
     }
     //TODO: update function to take user information as a parameter
+
     /**
      * This method adds a QR code to the user's collection with a comment
      *
      * @param comment      the comment the user has added to the QR code
      * @param documentName the name of the QR code to be added to the users collection
      */
-    private void addToUserCollection(String comment, String documentName){
+    private void addToUserCollection(String comment, String documentName) {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("users");
         HashMap<String, Object> userComment = new HashMap<>();
-        userComment.put("Comment",comment);
+        userComment.put("Comment", comment);
         // Make the change here after to do is done
-        collectionReference.document("Suvan").collection("scanned").document(documentName).set(userComment)
+        collectionReference.document(uname).collection("Scanned QRs").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -239,4 +249,40 @@ public class PostScanFragment extends Fragment {
                 });
     }
 
+    public void updatePlayerTotals() {
+
+        db = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = db.collection("users").document(uname);
+
+        //final ApiFuture<WriteResult> updateFuture = documentReference.update("population", FieldValue.increment(50));
+
+        documentReference.update("QrScanned", FieldValue.increment(1))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Count incremented successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error incrementing count", e);
+                    }
+                });
+
+        documentReference.update("TotalPoints", FieldValue.increment(scannedQrCode.getPoints()))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Count incremented successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error incrementing count", e);
+                    }
+                });
+
+    }
 }
