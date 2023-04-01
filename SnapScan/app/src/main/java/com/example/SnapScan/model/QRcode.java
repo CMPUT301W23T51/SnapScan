@@ -34,28 +34,25 @@ public class QRcode {
     // Constructor for QR code which sets the hash, name, points and image URL based on the result
     public QRcode(String result) {
         this.result = result;
-        setHash(result);
-        setName();
-        setPoints();
-        setImageURL();
-    }
-
-    //Constructor for QR code which sets the hash, name, points and image URL passed as parameters
-    public QRcode(String result,String hash, String name, int points,GeoPoint location, String imageURL) {
-        this.hash = hash;
-        this.result = result;
-        this.geoPoint = location;
-        this.name = name;
-        this.points = points;
-        this.imageURL = imageURL;
+        createHash(result);
+        createName();
+        createImageURL();
+        this.points = calculateScore();
+        // Not setting the GeoPoint as we will set it after asking for permission
+        this.geoPoint = null;
     }
 
     //Empty constructor for Firebase
     public QRcode() {
     }
+    // Public Setter for Firebase
 
     public String getImageURL() {
         return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public void loadImage(ImageView imageView) {
@@ -77,7 +74,7 @@ public class QRcode {
      * @see <a href="https://picsum.photos">Picsum</a>
      * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
      */
-    private void setImageURL() {
+    private void createImageURL() {
         // Generate a random number between 1 and 100 for image seed
         int imageSeed = new Random().nextInt(100);
         this.imageURL = "https://picsum.photos/seed/" + imageSeed + "/400/275";
@@ -88,52 +85,16 @@ public class QRcode {
         return hash;
     }
 
-    // Getter and Setter for hash
-    private void setHash(String result) {
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    private void createHash(String result) {
         getHash256(result);
     }
 
-
-    // Getter and Setter for name
-
-    /**
-     * Set the name of the QR code using a random name generator from the Faker library
-     *
-     * @see <a href="faker.readthedocs.io">Faker</a>
-     */
-    private void setName() {
-        Faker faker = new Faker();
-        this.name = faker.ancient().god();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    // Getter and Setter for points
-    public int getPoints() {
-        return this.points;
-    }
-
-    private void setPoints() {
-        // Get and set points
-        this.points = calculateScore();
-    }
-
-    // Getter and Setter for GeoPoint
-    // Setters for GeoPoint is public as we will set it after asking for permission
-    public void setGeoPoint(Double latitude, Double longitude) {
-        this.geoPoint = new GeoPoint(latitude, longitude);
-    }
-
-    public GeoPoint getGeoPoint() {
-        return this.geoPoint;
-    }
-
-
     /**
      * Calculate the Hash 256 value of the QR code and set the hash value
-     *
      * @param result the result(data) of the QR code
      * @see <a href="https://www.baeldung.com/sha-256-hashing-java">Baeldung</a>
      */
@@ -156,6 +117,47 @@ public class QRcode {
             hash256 = Integer.toHexString(result.hashCode());
         }
         this.hash = hash256;
+    }
+
+    /**
+     * Set the name of the QR code using a random name generator from the Faker library
+     *
+     * @see <a href="faker.readthedocs.io">Faker</a>
+     */
+    private void createName() {
+        Faker faker = new Faker();
+        this.name = faker.ancient().god();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Getter and Setter for points
+    public int getPoints() {
+        return this.points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    // Getter and Setter for GeoPoint
+    // Setters for GeoPoint is public as we will set it after asking for permission
+    public void setGeoPointWithLatLong(Double latitude, Double longitude) {
+        this.geoPoint = new GeoPoint(latitude, longitude);
+    }
+
+    public GeoPoint getGeoPoint() {
+        return this.geoPoint;
+    }
+
+    public void setGeoPoint(GeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
     }
 
     /**
@@ -182,8 +184,12 @@ public class QRcode {
         return Math.round(score);
     }
 
-
     public String getResult() {
         return this.result;
     }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }
+

@@ -110,7 +110,7 @@ public class PostScanFragment extends Fragment {
                             .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                                 @Override
                                 public void onSuccess(Location location) {
-                                    scannedQrCode.setGeoPoint(location.getLatitude(), location.getLongitude());
+                                    scannedQrCode.setGeoPointWithLatLong(location.getLatitude(), location.getLongitude());
                                     Toast.makeText(getContext(), "Location Saved Successfully", Toast.LENGTH_SHORT).show();
                                 }
                             })

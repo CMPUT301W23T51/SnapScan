@@ -6,17 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.example.SnapScan.model.QRcode;
 import com.github.javafaker.Faker;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
 public class QRcodeTest {
 
-    private QRcode qrcode;
+    private static QRcode qrcode;
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    static void setUp() {
         qrcode = new QRcode("test");
     }
 
@@ -26,6 +27,25 @@ public class QRcodeTest {
         Faker faker = new Faker();
         String name = faker.ancient().god();
         assertTrue(name.length() > 0);
+    }
+    // Testing all setters and getters for Firebase
+    @Test
+    public void testSetters() {
+        QRcode qrcodeSetter = new QRcode();
+        qrcodeSetter.setHash("test");
+        qrcodeSetter.setName("test");
+        qrcodeSetter.setPoints(10);
+        qrcodeSetter.setResult("test");
+        qrcodeSetter.setImageURL("test");
+        qrcodeSetter.setGeoPointWithLatLong(10.0, 10.0);
+        assertEquals("test", qrcodeSetter.getHash());
+        assertEquals("test", qrcodeSetter.getName());
+        assertEquals(10, qrcodeSetter.getPoints());
+        assertEquals("test", qrcodeSetter.getResult());
+        assertEquals("test", qrcodeSetter.getImageURL());
+        assertEquals(10.0, qrcodeSetter.getGeoPoint().getLatitude());
+        assertEquals(10.0, qrcodeSetter.getGeoPoint().getLongitude());
+        qrcodeSetter = null;
     }
 
     // Test to check if the QR code hash is generated correctly
@@ -38,6 +58,7 @@ public class QRcodeTest {
 
     }
 
+    // Test to check if the QR code name is generated correctly
     @Test
     public void testGetName() {
         String name = qrcode.getName();
@@ -59,7 +80,7 @@ public class QRcodeTest {
         System.out.println("Original: " + qrcode.getPoints());
 
     }
-
+    // Test to check if the QR code image URL is generated correctly
     @Test
     public void testImageURL() {
         // Regex to check if the URL is valid
@@ -73,5 +94,9 @@ public class QRcodeTest {
         Assertions.assertEquals("test", qrcode.getResult());
     }
 
+    @AfterAll
+    static void tearDown() {
+        qrcode = null;
+    }
 }
 
