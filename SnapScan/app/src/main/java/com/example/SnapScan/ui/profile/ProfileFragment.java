@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,15 +15,22 @@ import com.example.SnapScan.R;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.databinding.FragmentProfileBinding;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        TextView player_qrCount = binding.qrCountInt;
+        TextView player_totalPoints = binding.totalPointsInt;
 
         // Open the QRListFragment when the button is clicked
         Button MyQrsButton = binding.myQrButton;

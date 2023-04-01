@@ -2,7 +2,6 @@ package com.example.SnapScan.ui.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -20,6 +19,8 @@ import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class QRListFragment extends Fragment {
     public static boolean dataLoaded;
     protected RecyclerView mRecyclerView;
     BottomNavigationView bottomNavigationView;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -92,18 +94,17 @@ public class QRListFragment extends Fragment {
             @Override
             //Set Boundaries for the swipe
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return 0.7f;
-            }
-
-            @Override
-            public int convertToAbsoluteDirection(int flags, int layoutDirection) {
-                if (MotionEvent.ACTION_CANCEL == 0 || MotionEvent.ACTION_UP == 0) {
-                    return 0;
-                }
-                return super.convertToAbsoluteDirection(flags, layoutDirection);
+                return 0.6f;
             }
 
 
+
+            /**
+             * This method is called when the user swipes an QR code , it removes the QR code from the list
+             * and the database
+             * @param viewHolder The view holder of the item that was swiped
+             * @param direction The direction of the swipe
+             */
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 // Get the position of the item that was swiped
@@ -128,7 +129,8 @@ public class QRListFragment extends Fragment {
                         }).show();
 
                 // Delete the QR code from the database
-                // FirebaseFirestore.getInstance().collection("QRcodes").document(qrCode.getQrCodeId()).delete();
+//                CollectionReference collectionReference = db.collection("users").document("suvan5@gmail.com").collection("Scanned QRs");
+//                collectionReference.document(qrCode.getHash()).delete();
             }
 
         });
