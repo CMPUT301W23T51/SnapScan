@@ -39,7 +39,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -71,8 +70,6 @@ public class PostScanFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
             String data = result.getString("Scanned Data");
             scannedQrCode = new QRcode(data);
-            //TODO: Check if the QR code is already in the database and set view accordingly
-
             //Loading the image into the ImageView
             ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
             scannedQrCode.loadImage(qr_visual);
@@ -144,11 +141,10 @@ public class PostScanFragment extends Fragment {
                                         Log.d(TAG, "Document with same Hash does not exist in Firebase, Adding to Firebase");
                                         addQRToFirebase(QRHash);
                                     }
-                                    // Add the QR code to the user's collection
-
                                     // Get the comment from the user
                                     EditText comment = root.findViewById(R.id.editText_qr_comment);
 
+                                    // Add the QR code to the user's collection
                                     addToUserCollection(comment.getText().toString(), QRHash);
                                 } else {
                                     Log.d(TAG, "Error getting document: ", task.getException());
@@ -189,14 +185,7 @@ public class PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the QR Object to the database
-        HashMap<String, Object> qrData = new HashMap<>();
-        qrData.put("name", scannedQrCode.getName());
-        qrData.put("points", scannedQrCode.getPoints());
-        qrData.put("result", scannedQrCode.getResult());
-        qrData.put("hash", scannedQrCode.getHash());
-        qrData.put("imageURL", scannedQrCode.getImageURL());
-        qrData.put("geoPoint", scannedQrCode.getGeoPoint());
-        collectionReference.document(documentName).set(qrData)
+        collectionReference.document(documentName).set(scannedQrCode)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
