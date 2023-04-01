@@ -77,17 +77,11 @@ public class PostScanFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
             String data = result.getString("Scanned Data");
             scannedQrCode = new QRcode(data);
+            //TODO: Check if the QR code is already in the database and set view accordingly
 
-
-            // Using Picasso to load the image from the URL
-            try {
-                Picasso.get()
-                        .load(scannedQrCode.getImageURL())
-                        .into((ImageView) root.findViewById(R.id.imageViewQrCode));
-            } catch (Exception e) {
-                // Should display app Icon if the QR code does not have an image
-                Log.d(TAG, "Unable to Fetch Visual Representation : " + e.getMessage());
-            }
+            //Loading the image into the ImageView
+            ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
+            scannedQrCode.loadImage(qr_visual);
 
 
             //Setting up the  views to display the data
@@ -122,9 +116,8 @@ public class PostScanFragment extends Fragment {
                             .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                                 @Override
                                 public void onSuccess(Location location) {
-                                    scannedQrCode.setgeoPoint(location.getLatitude(), location.getLongitude());
+                                    scannedQrCode.setGeoPointWithLatLong(location.getLatitude(), location.getLongitude());
                                     Toast.makeText(getContext(), "Location Saved Successfully", Toast.LENGTH_SHORT).show();
-                                    System.out.println(scannedQrCode.getgeoPoint());
                                 }
                             })
                             .addOnFailureListener(getActivity(), new OnFailureListener() {
@@ -205,7 +198,14 @@ public class PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the QR Object to the database
-        collectionReference.document(documentName).set(scannedQrCode)
+        HashMap<String, Object> qrData = new HashMap<>();
+        qrData.put("name", scannedQrCode.getName());
+        qrData.put("points", scannedQrCode.getPoints());
+        qrData.put("result", scannedQrCode.getResult());
+        qrData.put("hash", scannedQrCode.getHash());
+        qrData.put("imageURL", scannedQrCode.getImageURL());
+        qrData.put("geoPoint", scannedQrCode.getGeoPoint());
+        collectionReference.document(documentName).set(qrData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
