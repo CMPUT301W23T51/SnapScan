@@ -36,7 +36,10 @@ public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListView
 
     @Override
     public void onBindViewHolder(@NonNull QRListViewHolder holder, int position) {
+        // Get the selected qr code
         QRcode selected_qr = qrCodes.get(position);
+
+        // Set the qr code information
         holder.qrCode_name.setText(selected_qr.getName());
         holder.qrCode_score.setText(String.valueOf(selected_qr.getPoints()));
         selected_qr.loadImage(holder.qrCode_VR);
