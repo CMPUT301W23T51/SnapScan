@@ -6,6 +6,8 @@ import com.github.javafaker.Faker;
 import com.google.firebase.firestore.GeoPoint;
 
 import org.apache.commons.lang3.ArrayUtils;
+import android.location.Location;
+
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
