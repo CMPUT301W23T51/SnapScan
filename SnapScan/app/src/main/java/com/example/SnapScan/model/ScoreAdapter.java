@@ -13,26 +13,53 @@ import com.example.SnapScan.R;
 import com.example.SnapScan.ui.profile.Score;
 
 import java.util.ArrayList;
+/**
+
+ A custom adapter for displaying a list of Scores in a RecyclerView.
+
+ Uses a ScoreViewHolder to display the individual items in the list.
+ */
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
 
     private ArrayList<Score> mScores;
     private OnItemClickListener mOnClickListener;
     private String mClickedUsername;
+    /**
+
+     Interface for listening to click events on items in the list.
+     */
 
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
+    /**
+
+     Sets the click listener for items in the list.
+     @param listener The listener to set.
+     */
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mOnClickListener = listener;
     }
+    /**
+
+     ViewHolder class for displaying individual items in the list.
+     */
 
     public static class ScoreViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mNameTextView;
         public TextView mPointsTextView;
         public TextView mRankTextView;
+        /**
+
+         Constructor for the ViewHolder.
+
+         @param itemView The View representing the item to display.
+
+         @param listener The click listener to set on the item.
+         */
 
         public ScoreViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -54,6 +81,13 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         }
 
     }
+    /**
+
+     Called when a new ViewHolder is needed.
+     @param parent The parent ViewGroup.
+     @param viewType The type of the new View.
+     @return A new ScoreViewHolder.
+     */
 
     @NonNull
     @Override
@@ -62,6 +96,12 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         ScoreViewHolder viewHolder = new ScoreViewHolder(view, mOnClickListener);
         return viewHolder;
     }
+    /**
+
+     Called when a ViewHolder needs to be updated with new data.
+     @param holder The ScoreViewHolder to update.
+     @param position The position of the item in the list.
+     */
 
     @Override
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
@@ -78,16 +118,31 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         }
     }
 
+    /**
 
+     Gets the number of items in the list.
+     @return The number of items in the list.
+     */
     @Override
     public int getItemCount() {
         return mScores.size();
     }
+    /**
+
+     Constructor for the ScoreAdapter.
+     @param scores The list of Scores to display.
+     @param listener The listener for click events on items in the list.
+     */
 
     public ScoreAdapter(ArrayList<Score> scores, OnItemClickListener listener) {
         mScores = scores;
         mOnClickListener = listener;
     }
+    /**
+
+     Sets the username of the item that has been clicked.
+     @param username The username of the clicked item.
+     */
 
     public void setClickedUsername(String username) {
         mClickedUsername = username;

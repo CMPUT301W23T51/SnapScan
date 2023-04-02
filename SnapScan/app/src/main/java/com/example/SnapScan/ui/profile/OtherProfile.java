@@ -19,6 +19,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+/**
+
+ OtherProfile class displays the profile of a user selected from the leaderboard.
+
+ The class retrieves user data from Firestore and displays it in the TextViews.
+ */
 
 public class OtherProfile extends AppCompatActivity {
 
@@ -26,6 +32,14 @@ public class OtherProfile extends AppCompatActivity {
     private String username;
     private TextView mNameTextView;
     private TextView mPointsTextView;
+    /**
+
+     onCreate method is called when the activity is created.
+
+     It retrieves the username passed from the leaderboard activity and displays the user data in the TextViews.
+
+     @param savedInstanceState Bundle object containing the activity's previously saved state.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

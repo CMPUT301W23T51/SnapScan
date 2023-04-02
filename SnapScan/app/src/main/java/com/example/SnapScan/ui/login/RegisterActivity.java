@@ -36,6 +36,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+/**
+
+        RegisterActivity is an activity class that allows the user to register for an account
+
+        in the app by filling out a form that includes their name, email, date of birth, phone number,
+
+        password and gender.
+        */
 
 public class RegisterActivity extends Activity {
 

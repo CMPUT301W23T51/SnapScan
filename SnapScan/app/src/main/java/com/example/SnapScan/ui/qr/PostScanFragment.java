@@ -52,7 +52,7 @@ import java.util.HashMap;
  * and saved the location of the QR code
  */
 
-public class PostScanFragment extends Fragment {
+public class    PostScanFragment extends Fragment {
 
     public String uname = ProfileFragment.username;
 

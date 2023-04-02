@@ -32,14 +32,37 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Pattern;
+/**
+
+ The LoginActivity class is responsible for handling the login functionality of the application.
+
+ It contains the methods for handling user login, forgot password functionality, and redirecting the user to the registration activity.
+
+ It also initializes the UI components and sets click listeners for the login and register buttons.
+ */
 
 public class LoginActivity extends Activity {
+    /**
+     * editTextLoginEmail is an EditText field that allows users to enter their email address during login.
+     * editTextLoginPassword is an EditText field that allows users to enter their password during login.
+     * firebaseAuth is an instance of the FirebaseAuth class which allows this class to interact with Firebase Authentication.
+     * progressBar is a ProgressBar view that displays during login to show the progress of the login process.
+     * forgotPassword is a TextView that displays a "forgot password" button and allows users to reset their password.
+     */
     private EditText editTextLoginEmail, editTextLoginPassword;
     private FirebaseAuth firebaseAuth;
     private ProgressBar progressBar;
     private TextView forgotPassword;
 
     public String username; // trying to pass it to main activity class
+    /**
+
+     The onCreate() method is called when the activity is first created.
+
+     It initializes the UI components and sets click listeners for the login and register buttons.
+
+     @param savedInstanceState A Bundle object containing the activity's previously saved state.
+     */
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -100,6 +123,14 @@ public class LoginActivity extends Activity {
                 }
             }
         });
+        /**
+
+         This method is used when the user forgets their password. It displays a dialog box to enter the user's email
+
+         and sends a password reset email to the user's email address.
+
+         @param forgotPassword The button used to initiate the password reset process
+         */
 
         //when the user forgets the password
         forgotPassword.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +174,16 @@ public class LoginActivity extends Activity {
             }
         });
     }
+    /**
+
+     This method is used to log in a user. It uses the Firebase authentication to sign in the user with the provided email
+
+     and password. If the login is successful, the user is redirected to the main activity. Otherwise, an error message is displayed.
+
+     @param Email The user's email address
+
+     @param Password The user's password
+     */
 
 
     private void userLogin(String Email, String Password) {
@@ -180,7 +221,12 @@ public class LoginActivity extends Activity {
         });
 
     }
+    /**
 
+     This method is called when the activity is starting. It checks if the user is already logged in and redirects them to the main activity.
+
+     If the user is not logged in, a message is displayed prompting the user to log in.
+     */
 
     @Override
     protected void onStart() {

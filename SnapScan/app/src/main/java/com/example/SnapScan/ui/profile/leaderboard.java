@@ -33,6 +33,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+/**
+
+ The leaderboard activity displays a list of scores retrieved from a Firestore database
+ and allows users to search for specific scores by name.
+ This class extends Activity and implements SearchView.OnQueryTextListener.
+ @author [Prabhjot Singh Gandhi]
+
+ */
 
 public class leaderboard extends Activity implements SearchView.OnQueryTextListener {
     private static final String TAG = "Leaderboard";
@@ -42,6 +50,14 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button mSearchButton;
     private EditText mSearchEditText;
+    /**
+     * This method is called when the activity is first created. It sets up the RecyclerView,
+     * retrieves data from Firestore and sorts it in ascending order based on score. It also sets
+     * up the search functionality by finding the search EditText and button and setting an
+     * OnClickListener on the button.
+     *
+     * @param savedInstanceState A Bundle object containing the activity's previously saved state.
+     */
 
 
     @SuppressLint("MissingInflatedId")
@@ -156,6 +172,13 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
         return true;
     }
 */
+    /**
+
+     Called when the user submits the search query.
+     Performs a search by simulating a click on the search button.
+     @param query the search query entered by the user
+     @return false to indicate that the search is not handled by this method
+     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         // Perform search when user submits the query
