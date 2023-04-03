@@ -42,7 +42,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.List;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
+/**
+ * Fragment for displaying a Google Map with current location and QR code markers.
+ */
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -53,17 +56,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private FirebaseFirestore db;
     private CollectionReference qrCollection;
 
-
+    /**
+     * Required empty public constructor
+     */
     public MapFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // Initialize location provider
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-//        qrcode = new QRcode(getActivity());
+
     }
 
     @Override
@@ -71,16 +75,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
+        // Initialize Firebase Firestore
         db = FirebaseFirestore.getInstance();
         qrCollection = db.collection("QR");
-//        collectionReference.document(documentName).set(qrcode);
 
 
+        // Get map fragment and initialize map
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Initialize location callback for updating user's current location on map
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -112,6 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             }
         };
 
+        // Check for location permission and start requesting location updates
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             requestLocationUpdates();
@@ -123,6 +129,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         return view;
     }
 
+    /**
+     * Requests location updates from the FusedLocationProviderClient.
+     */
     private void requestLocationUpdates() {
         LocationRequest locationRequest = LocationRequest.create()
                 .setInterval(5000)
@@ -137,13 +146,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 null /* Looper */);
     }
 
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        // Update user's current location on the map
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-    }
-
+    /**
+     * This method handles the result of a permission request for location.
+     * @param requestCode An integer representing the request code passed to requestPermissions().
+     * @param permissions An array of strings representing the requested permissions.
+     * @param grantResults An array of integers representing the grant results for the corresponding permissions in the permissions array.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -157,19 +165,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     }
 
-
+    /**
+     * This method is called when the fragment is destroyed.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 
+    /**
+
+     This method is called when the Google Map object is ready to use.
+     @param googleMap A GoogleMap object representing the map.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
         if (mMap != null) {
-            // Query Firebase and add markers here
+            // Firebase call and qr location add markers
 
             qrCollection.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
