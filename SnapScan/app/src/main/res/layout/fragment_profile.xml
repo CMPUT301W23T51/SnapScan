@@ -54,7 +54,7 @@
         android:hint="10"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="100sp"
+        android:textSize="48sp"
         android:textStyle="bold" />
 
     <!-- Vertical divider -->
@@ -92,7 +92,7 @@
         android:hint="10"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="100sp"
+        android:textSize="48sp"
         android:textStyle="bold" />
 
     <TextView
@@ -185,6 +185,5 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/black" />
-
 
 </RelativeLayout>
