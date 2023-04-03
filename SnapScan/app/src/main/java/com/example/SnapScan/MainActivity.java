@@ -1,6 +1,7 @@
 package com.example.SnapScan;
 
 import static android.content.ContentValues.TAG;
+
 import static com.example.SnapScan.ui.profile.QRListFragment.dataLoaded;
 import static com.example.SnapScan.ui.profile.QRListFragment.userQrList;
 
@@ -16,6 +17,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.SnapScan.databinding.ActivityMainBinding;
+
 import com.example.SnapScan.model.QRcode;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getUser();
 
         // We are populating the qrList in the MainActivity as it reduces the loading time
         // of the QRListFragment
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_profile, R.id.navigation_qr, R.id.navigation_map)
                 .build();
+
 
         // Alternatively, you can use the Navigation to get the NavController
         // NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
@@ -119,5 +123,25 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+    private void getUser(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        CollectionReference collectionRef = db.collection("users");
+
+        Query query = collectionRef.whereEqualTo
+                ("deviceID", firebaseAuth.getCurrentUser().getUid());
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Handle each document that matches the query
+                    Log.d(TAG, document.getId());
+                    ProfileFragment.username = document.getId();
+                }
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
+            }
+        });
     }
 }
