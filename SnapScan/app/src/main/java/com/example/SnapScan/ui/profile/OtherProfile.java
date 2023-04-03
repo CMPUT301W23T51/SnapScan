@@ -37,7 +37,6 @@ public class OtherProfile extends Activity {
 
         // Get the username passed from the leaderboard activity
         username = getIntent().getStringExtra("username");
-        //username = ProfileFragment.username;
         // Find the TextViews in the layout file
         mNameTextView = findViewById(R.id.player_name);
         mPointsTextView = findViewById(R.id.total_points_int);
