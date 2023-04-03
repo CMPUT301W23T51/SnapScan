@@ -11,26 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import com.example.SnapScan.R;
-
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.SnapScan.R;
 import com.example.SnapScan.databinding.FragmentProfileBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 /**
-
- A fragment to display user profile information, including a button to navigate to the user's list of QR codes
-
- and a button to open the leaderboard.
+ * A fragment to display user profile information, including a button to navigate to the user's list of QR codes
+ * and a button to open the leaderboard.
+ *
  */
 
 
 public class ProfileFragment extends Fragment {
-
-    public static String username;
-
-    private FragmentProfileBinding binding;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FragmentProfileBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

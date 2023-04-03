@@ -37,6 +37,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static String USER_ID;
     private ActivityMainBinding binding;
 
     @Override
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     // Handle each document that matches the query
                     Log.d(TAG, document.getId());
-                    ProfileFragment.username = document.getId();
+                    USER_ID = document.getId();
                 }
             } else {
                 Log.d(TAG, "Error getting documents: ", task.getException());
