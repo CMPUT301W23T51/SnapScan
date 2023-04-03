@@ -17,20 +17,19 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.SnapScan.R;
 import com.example.SnapScan.databinding.FragmentProfileBinding;
 
+
 /**
- * A fragment to display user profile information, including a button to navigate to the user's list of QR codes
- * and a button to open the leaderboard.
+ * The ProfileFragment class is the fragment that is displayed when the user clicks on the profile
+ * it displays the username and the number of QR codes the user has scanned and the number of
+ * points the user has. The user can also click on the button to view their QR codes and the
+ * leaderboard button to view the leaderboard.
  */
-
-
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         // Open the QRListFragment when the button is clicked
         Button MyQrsButton = binding.myQrButton;
         MyQrsButton.setOnClickListener(v -> {
@@ -51,7 +50,6 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         return binding.getRoot();
     }
 
@@ -61,4 +59,8 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }

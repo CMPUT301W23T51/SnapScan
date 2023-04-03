@@ -20,6 +20,10 @@ import java.util.Random;
 
 /**
  * Class to represent a QR codes
+ * Generates a hash value for the QR code based on the result
+ * Generates a random image URL for the QR code
+ * Calculates the score of the QR code based on the hash value
+ * We can compare the QR codes based on the score
  */
 public class QRcode implements Comparable<QRcode>{
 
@@ -127,7 +131,14 @@ public class QRcode implements Comparable<QRcode>{
      */
     private void createName() {
         Faker faker = new Faker();
-        this.name = faker.ancient().god();
+        int nameRandom = new Random().nextInt(3);
+        if (nameRandom == 0) {
+            this.name = faker.ancient().god();
+        } else if (nameRandom == 1) {
+            this.name = faker.harryPotter().character();
+        } else {
+            this.name = faker.superhero().name();
+        }
     }
 
     public String getName() {
@@ -193,8 +204,12 @@ public class QRcode implements Comparable<QRcode>{
         this.result = result;
     }
 
-    // Defining the compareTo method to sort the QR codes based on the points
-    // Descending order
+    /**
+     * Compare the QR codes based on the score
+     * @param qRcode the QR code to compare with
+     * @return the difference between the scores of the QR codes
+     * Descending order
+     */
     @Override
     public int compareTo(QRcode qRcode) {
         return qRcode.getPoints() - this.getPoints();

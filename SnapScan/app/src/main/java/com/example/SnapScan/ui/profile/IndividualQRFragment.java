@@ -26,6 +26,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This fragment is used to display the individual QR code
+ * when the user clicks on a QR code in the QRListFragment.
+ * It displays the QR code image, the name of the QR code,
+ * the result of the QR code, and the points of the QR code.
+ * if a user has commented on the QR code, it will also display
+ * the comment.
+ */
 public class IndividualQRFragment extends Fragment {
     FirebaseFirestore db;
     private String qrHash;

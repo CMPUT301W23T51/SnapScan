@@ -291,6 +291,9 @@ public class PostScanFragment extends Fragment {
                 });
     }
 
+    /**
+     * This method updates the user's total points and the number of QR codes they have scanned
+     */
     public void updatePlayerTotals() {
 
         db = FirebaseFirestore.getInstance();
