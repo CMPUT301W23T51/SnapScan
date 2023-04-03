@@ -2,6 +2,8 @@ package com.example.SnapScan.ui.profile;
 
 import static android.content.ContentValues.TAG;
 
+import static com.example.SnapScan.MainActivity.USER_ID;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,22 +29,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class IndividualQRFragment extends Fragment {
     FirebaseFirestore db;
     private String qrHash;
-    private TextView qrNameView;
-    private TextView qrScoreView;
-    private TextView qrResultView;
-    private TextView qrCommentView;
-    private ImageView qrImage;
-    private ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_individual_qr, container, false);
-        progressBar = view.findViewById(R.id.progressBar_qr_individual);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar_qr_individual);
 
         // Receive the QR hash from the QRListFragment
         getParentFragmentManager().setFragmentResultListener("Hash", this, (requestKey, result) -> {
             qrHash = result.getString("QR Hash");
-            System.out.println("QR Hash to: " + qrHash);
             // Important to use DisplayQR line here, otherwise the QR code will not be displayed
             // as the hash is not received in time if it is called outside of this method
             displayQR(qrHash);
@@ -80,17 +76,44 @@ public class IndividualQRFragment extends Fragment {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 QRcode qr = documentSnapshot.toObject(QRcode.class);
                 Log.d("IndividualQRFragment", "Successfully Made QR Code");
-                qrImage = getView().findViewById(R.id.imageView_qr);
+                ImageView qrImage = getView().findViewById(R.id.imageView_qr);
                 qr.loadImage(qrImage);
-                qrNameView = getView().findViewById(R.id.qr_name_placeholder);
+                TextView qrNameView = getView().findViewById(R.id.qr_name_placeholder);
                 qrNameView.setText(qr.getName());
-                qrResultView = getView().findViewById(R.id.qr_result_placeholder);
+                TextView qrResultView = getView().findViewById(R.id.qr_result_placeholder);
                 qrResultView.setText(qr.getResult());
-                qrScoreView = getView().findViewById(R.id.qr_score_placeholder);
+                TextView qrScoreView = getView().findViewById(R.id.qr_score_placeholder);
                 qrScoreView.setText(String.valueOf(qr.getPoints()));
-                // TODO: get proper comments
-                qrCommentView = getView().findViewById(R.id.qr_comment);
-                qrCommentView.setText(qr.getImageURL());
+                displayComment(qrHash);
+            }
+        });
+    }
+    /**
+     * This method is responsible for displaying the Comment User has made on the QR
+     * if the user has not made one it will display "No Comment"
+     * @param qrHash the hash of the QR code
+     */
+    public void displayComment(String qrHash) {
+        db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users")
+                .document(USER_ID)
+                .collection("Scanned QRs")
+                .document(qrHash);
+        docRef.get().addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Failed to get QR Code " + e.getMessage());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String comment = documentSnapshot.getString("Comment");
+                Log.d("IndividualQRFragment", "Successfully Found Comment");
+                if (comment == null || comment.isEmpty()) {
+                    comment = "No Comment";
+                }
+                TextView qrCommentView = getView().findViewById(R.id.qr_comment);
+                qrCommentView.setText(comment);
             }
         });
     }

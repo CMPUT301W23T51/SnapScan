@@ -140,7 +140,7 @@
         android:textStyle="italic" />
 
     <TextView
-        android:id="@+id/lowest_qr_int"
+        android:id="@+id/lowest_qr_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/lowest_qr_text"

@@ -1,5 +1,7 @@
 package com.example.SnapScan.ui.profile;
 
+import static com.example.SnapScan.MainActivity.USER_ID;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,7 +120,8 @@ public class QRListFragment extends Fragment {
 
                 // Notify the adapter that the item was removed
                 mRecyclerView.getAdapter().notifyItemRemoved(position);
-                Snackbar.make(mRecyclerView, "QR code " + qrCode.getName() + " deleted", Snackbar.LENGTH_LONG)
+                Snackbar undoOption = Snackbar.make(mRecyclerView, "QR code " + qrCode.getName() + " Deleted", Snackbar.LENGTH_LONG);
+                undoOption
                         .setTextColor(getResources().getColor(R.color.ComplementaryBlueLight))
                         .setAction("Undo", new View.OnClickListener() {
                             @Override
@@ -131,8 +134,17 @@ public class QRListFragment extends Fragment {
                         }).show();
 
                 // Delete the QR code from the database
-//                CollectionReference collectionReference = db.collection("users").document("suvan5@gmail.com").collection("Scanned QRs");
-//                collectionReference.document(qrCode.getHash()).delete();
+                undoOption.addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+                        if (event != DISMISS_EVENT_ACTION) {
+                            // Delete the QR code from the database
+                            CollectionReference collectionReference = db.collection("users").document(USER_ID).collection("Scanned QRs");
+                            collectionReference.document(qrCode.getHash()).delete();
+                        }
+                    }
+                });
             }
 
         });
