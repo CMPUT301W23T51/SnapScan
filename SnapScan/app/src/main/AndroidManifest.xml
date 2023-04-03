@@ -30,11 +30,9 @@
             android:label="Player Profile"/>
 
         <activity
-            android:name=".ui.profile.leaderboard"
+            android:name=".ui.profile.Leaderboard"
             android:exported="false"
             android:label="Leaderboard"/>
-            android:name=".ui.profile.Leaderboard"
-            android:exported="false" />
 
         <activity
             android:name=".MainActivity"
