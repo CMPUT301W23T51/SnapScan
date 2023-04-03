@@ -131,10 +131,7 @@ public class PostScanFragment extends Fragment {
                 }
                 // Add the QR code to the user's collection
                 EditText comment = root.findViewById(R.id.editText_qr_comment);
-
                 addToUserCollection(comment.getText().toString(), QRHash);
-                updatePlayerTotals();
-
                 // Go back to Profile fragment to signify completion of QR scan
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
                 navController.navigate(R.id.navigation_profile);
@@ -270,23 +267,39 @@ public class PostScanFragment extends Fragment {
      */
     private void addToUserCollection(String comment, String documentName) {
         db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("users");
+        CollectionReference collectionReference = db.collection("users").document(USER_ID).collection("Scanned QRs");
         HashMap<String, Object> userComment = new HashMap<>();
         userComment.put("Comment", comment);
-        // Make the change here after to do is done
+        // Check if the user has already scanned the QR code
+        collectionReference.document(documentName).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Log.d(TAG, "Document with same Hash exists in users Collection");
+                            // Updated Users Comment
+                            collectionReference.document(documentName).update("Comment", comment);
 
-        collectionReference.document(USER_ID).collection("Scanned QRs").document(documentName).set(userComment)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "QR code has been added to the user's collection!");
-                        userQrList.add(scannedQrCode);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added to the user collection!" + e);
+                        } else {
+                            Log.d(TAG, "Document with same Hash does not exist in users Collection");
+                            collectionReference.document(documentName).set(userComment)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "Data has been added successfully to the Database!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d(TAG, "Data could not be added to the firebase!" + e);
+                                        }
+                                    });
+                            // Add the QR Object to the database
+                            userQrList.add(scannedQrCode);
+                            // Update the user's total points and the number of QR codes they have scanned
+                            updatePlayerTotals();
+                        }
                     }
                 });
     }

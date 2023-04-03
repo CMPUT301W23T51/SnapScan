@@ -73,6 +73,7 @@ public class QRListFragment extends Fragment {
 //        });
         ProgressBar progressBar = view.findViewById(R.id.progressBar_qr_list);
         if (dataLoaded) {
+            userQrList.sort(QRcode::compareTo);
             QRListAdapter qrListAdapter = new QRListAdapter(userQrList);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(layoutManager);

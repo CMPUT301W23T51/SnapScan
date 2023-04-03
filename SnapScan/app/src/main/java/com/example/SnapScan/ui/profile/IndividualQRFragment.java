@@ -21,6 +21,7 @@ import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,6 +43,8 @@ public class IndividualQRFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_individual_qr, container, false);
         ProgressBar progressBar = view.findViewById(R.id.progressBar_qr_individual);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.GONE);
 
         // Receive the QR hash from the QRListFragment
         getParentFragmentManager().setFragmentResultListener("Hash", this, (requestKey, result) -> {
@@ -81,7 +84,6 @@ public class IndividualQRFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 QRcode qr = documentSnapshot.toObject(QRcode.class);
-                Log.d("IndividualQRFragment", "Successfully Made QR Code");
                 ImageView qrImage = getView().findViewById(R.id.imageView_qr);
                 qr.loadImage(qrImage);
                 TextView qrNameView = getView().findViewById(R.id.qr_name_placeholder);
@@ -90,6 +92,7 @@ public class IndividualQRFragment extends Fragment {
                 qrResultView.setText(qr.getResult());
                 TextView qrScoreView = getView().findViewById(R.id.qr_score_placeholder);
                 qrScoreView.setText(String.valueOf(qr.getPoints()));
+                Log.d("IndividualQRFragment", "Successfully Made QR Code");
                 displayComment(qrHash);
             }
         });
@@ -114,12 +117,12 @@ public class IndividualQRFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String comment = documentSnapshot.getString("Comment");
-                Log.d("IndividualQRFragment", "Successfully Found Comment");
                 if (comment == null || comment.isEmpty()) {
                     comment = "No Comment";
                 }
                 TextView qrCommentView = getView().findViewById(R.id.qr_comment);
                 qrCommentView.setText(comment);
+                Log.d("IndividualQRFragment", "Successfully Found Comment");
             }
         });
     }

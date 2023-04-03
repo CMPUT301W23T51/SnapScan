@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                     // Handle each document that matches the query
                     Log.d(TAG, document.getId());
                     USER_ID = document.getId();
+                    userQrList.clear();
                     populateUserQRList();
                 }
             } else {
