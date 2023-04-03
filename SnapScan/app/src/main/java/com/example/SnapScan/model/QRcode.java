@@ -1,9 +1,15 @@
 package com.example.SnapScan.model;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 
 import com.github.javafaker.Faker;
 import com.google.firebase.firestore.GeoPoint;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -14,106 +20,86 @@ import java.util.Random;
 
 /**
  * Class to represent a QR codes
+ * Generates a hash value for the QR code based on the result
+ * Generates a random image URL for the QR code
+ * Calculates the score of the QR code based on the hash value
+ * We can compare the QR codes based on the score
  */
-public class QRcode {
+public class QRcode implements Comparable<QRcode>{
 
-    private final String result;
-    // https://picsum.photos is used to generate random images which requires the image seed
-    private int imageSeed = 1;
+    private String result;
     private String hash;
     private String name;
     private int points;
     private GeoPoint geoPoint;
     private String imageURL;
 
-    // Constructor for QR code which sets the hash, name, points, image seed and image URL
+
+    // Constructor for QR code which sets the hash, name, points and image URL based on the result
     public QRcode(String result) {
         this.result = result;
-        setHash(result);
-        setName();
-        setPoints();
-        setImageSeed();
-        setImageURL();
+        createHash(result);
+        createName();
+        createImageURL();
+        this.points = calculateScore();
+        // Not setting the GeoPoint as we will set it after asking for permission
+        this.geoPoint = null;
     }
 
-    /**
-     * Get the string Value of image seed to be used in the QR code image
-     * returning as string because the image seed is used in the URL
-     *
-     * @return String value of Image Seed
-     */
-    public String getImageSeed() {
-        return String.valueOf(imageSeed);
+    //Empty constructor for Firebase
+    public QRcode() {
     }
 
-    /**
-     * Generate a random Image Seed to be used in the QR code image
-     *
-     * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
-     */
-    public void setImageSeed() {
-        imageSeed = new Random().nextInt(100);
-    }
+    // Public Setter for Firebase
 
     public String getImageURL() {
         return imageURL;
     }
 
-    private void setImageURL() {
-        this.imageURL = "https://picsum.photos/seed/" + this.getImageSeed() + "/250/275";
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public void loadImage(ImageView imageView) {
+        // Using Picasso to load the image from the URL
+        try {
+            Picasso.get()
+                    .load(getImageURL())
+                    .into((ImageView) imageView);
+        } catch (Exception e) {
+            // Should display app Icon if the QR code does not have an image
+            Log.d(TAG, "Unable to Fetch Visual Representation : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Set the image URL of the QR code
+     * The image URL is generated using the image seed
+     *
+     * @see <a href="https://picsum.photos">Picsum</a>
+     * @see <a href="https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java">...</a>
+     */
+    private void createImageURL() {
+        // Generate a random number between 1 and 100 for image seed
+        int imageSeed = new Random().nextInt(100);
+        this.imageURL = "https://picsum.photos/seed/" + imageSeed + "/400/275";
+        //Width/Height
     }
 
     public String getHash() {
         return hash;
     }
 
-    // Getter and Setter for hash
-    private void setHash(String result) {
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    private void createHash(String result) {
         getHash256(result);
     }
 
-
-    // Getter and Setter for name
-
-    /**
-     * Set the name of the QR code using a random name generator from the Faker library
-     *
-     * @see <a href="faker.readthedocs.io">Faker</a>
-     */
-    private void setName() {
-        Faker faker = new Faker();
-        this.name = faker.ancient().god();
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    // Getter and Setter for points
-    public int getPoints() {
-        return this.points;
-    }
-
-    private void setPoints() {
-        // Get and set points
-        this.points = calculateScore();
-    }
-
-    // Getter and Setter for GeoPoint
-    // Setters for GeoPoint is public as we will set it after asking for permission
-    public void setgeoPoint(Double latitude, Double longitude) {
-        this.geoPoint = new GeoPoint(latitude, longitude);
-    }
-
-    public GeoPoint getgeoPoint() {
-        return this.geoPoint;
-    }
-
-
     /**
      * Calculate the Hash 256 value of the QR code and set the hash value
-     *
      * @param result the result(data) of the QR code
      * @see <a href="https://www.baeldung.com/sha-256-hashing-java">Baeldung</a>
      */
@@ -139,6 +125,54 @@ public class QRcode {
     }
 
     /**
+     * Set the name of the QR code using a random name generator from the Faker library
+     *
+     * @see <a href="faker.readthedocs.io">Faker</a>
+     */
+    private void createName() {
+        Faker faker = new Faker();
+        int nameRandom = new Random().nextInt(3);
+        if (nameRandom == 0) {
+            this.name = faker.ancient().god();
+        } else if (nameRandom == 1) {
+            this.name = faker.harryPotter().character();
+        } else {
+            this.name = faker.superhero().name();
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Getter and Setter for points
+    public int getPoints() {
+        return this.points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    // Getter and Setter for GeoPoint
+    // Setters for GeoPoint is public as we will set it after asking for permission
+    public void setGeoPointWithLatLong(Double latitude, Double longitude) {
+        this.geoPoint = new GeoPoint(latitude, longitude);
+    }
+
+    public GeoPoint getGeoPoint() {
+        return this.geoPoint;
+    }
+
+    public void setGeoPoint(GeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
+    }
+
+    /**
      * Calculate the score of the QR code
      * if the name of the QR code is a member of the group, the score is multiplied by 1000
      * else the score is multiplied by 10
@@ -152,13 +186,8 @@ public class QRcode {
         String[] members = {"Suvan", "Varun", "Anant", "Prabhjot", "Rechal", "Ruilin"};
         int score = 0;
         for (int i = 0; i < hex.length(); i++) {
-            int charValue = Character.getNumericValue(hex.charAt(i));
-            // Weight the score based on the position of the character in the string
-            int positionFactor = (hex.length() - i) * 2;
-            charValue *= positionFactor;
-            score += charValue;
+            score += Character.getNumericValue(hex.charAt(i));
         }
-
         if (ArrayUtils.contains(members, this.result)) {
             score *= 1000;
         } else {
@@ -167,9 +196,23 @@ public class QRcode {
         return Math.round(score);
     }
 
-
-
     public String getResult() {
         return this.result;
     }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    /**
+     * Compare the QR codes based on the score
+     * @param qRcode the QR code to compare with
+     * @return the difference between the scores of the QR codes
+     * Descending order
+     */
+    @Override
+    public int compareTo(QRcode qRcode) {
+        return qRcode.getPoints() - this.getPoints();
+    }
 }
+

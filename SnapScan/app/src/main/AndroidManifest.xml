@@ -25,7 +25,27 @@
             android:value="@string/map_key"/>
 
         <activity
+            android:name=".ui.profile.OtherProfile"
+            android:exported="false"
+            android:label="Player Profile"/>
+
+        <activity
+            android:name=".ui.profile.leaderboard"
+            android:exported="false"
+            android:label="Leaderboard"/>
+            android:name=".ui.profile.Leaderboard"
+            android:exported="false" />
+
+        <activity
             android:name=".MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.login.RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

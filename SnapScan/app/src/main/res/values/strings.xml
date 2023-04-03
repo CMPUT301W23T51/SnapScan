@@ -4,6 +4,7 @@
     <string name="title_map">Map</string>
     <string name="title_qr">QR</string>
     <string name="title_profile">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_VR">Visual Representation of QR Code</string>
+    <string name="name_attr">Name :</string>
+    <string name="score_attr">Score :</string>
 </resources>

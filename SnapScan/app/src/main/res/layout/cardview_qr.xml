@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/carView"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:layout_margin="15dp"
+    android:clickable="true"
+    android:focusable="true"
+    cardView:cardCornerRadius="1dp"
+    cardView:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/qr_list_image"
+            tools:background="@tools:sample/backgrounds/scenic"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/title_VR"
+            android:scaleType="centerCrop"
+            cardView:layout_constraintStart_toStartOf="parent"
+            cardView:layout_constraintTop_toTopOf="parent" />
+        <!--        to generate random text or images use tools:sample-->
+
+
+        <TextView
+            android:id="@+id/qr_list_name_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textAlignment="center"
+            android:maxLength="12"
+            android:hint="Name"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            cardView:layout_constraintLeft_toRightOf="@id/qr_list_image"
+            cardView:layout_constraintRight_toRightOf="parent"
+            cardView:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/qr_list_score_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:hint="1000"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            cardView:layout_constraintLeft_toRightOf="@id/qr_list_image"
+            cardView:layout_constraintRight_toRightOf="parent"
+            cardView:layout_constraintTop_toBottomOf="@+id/qr_list_name_placeholder" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

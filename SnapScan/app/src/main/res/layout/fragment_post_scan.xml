@@ -4,12 +4,12 @@
 
     <ImageView
         android:id="@+id/imageViewQrCode"
-        android:layout_width="250dp"
-        android:layout_height="275dp"
+        android:layout_width="400dp"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:clickable="false"
-        android:contentDescription="Image of QR Code"
+        android:contentDescription="@string/title_VR"
         android:src="@drawable/appicon" />
 
     <TextView
@@ -18,8 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewQrCode"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
         android:clickable="false"
-        android:hint="Name: "
+        android:hint="@string/name_attr"
         android:maxWidth="2000dp"
         android:maxHeight="75dp"
         android:padding="20dp"
@@ -32,7 +33,7 @@
         android:layout_below="@+id/qr_name_text"
         android:layout_alignParentStart="true"
         android:clickable="false"
-        android:hint="Score: "
+        android:hint="@string/score_attr"
         android:maxWidth="250dp"
         android:maxHeight="75dp"
         android:padding="20dp"
@@ -51,25 +52,41 @@
         android:padding="20dp"
         android:textSize="25sp" />
 
-<!--    TODO: Changes photo_button and gelocation_button to switch-->
+    <EditText
+        android:id="@+id/editText_qr_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/qr_result_text"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="Add Personal Comment"
+        android:inputType="textAutoCorrect"
+        android:maxWidth="488dp"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/photo_button"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/qr_result_text"
+        android:layout_below="@id/editText_qr_comment"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="15dp"
         android:text="Add Photo" />
 
-    <Button
-        android:id="@+id/geolocation_button"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/qr_result_text"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/location_switch"
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/editText_qr_comment"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="15dp"
-        android:text="Add Location" />
+        android:layout_marginEnd="10dp"
+        android:checked="false"
+        android:drawableStart="@drawable/baseline_location_on_24"
+        android:padding="10dp"
+        android:text="Location"
+        />
 
     <Button
         android:id="@+id/save_qr_button"
@@ -78,7 +95,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="60dp"
+        android:drawableStart="@android:drawable/ic_input_add"
         android:text="Save" />
+
 
 </RelativeLayout>

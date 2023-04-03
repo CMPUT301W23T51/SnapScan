@@ -1,0 +1,109 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progressBar_qr_individual"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/imageView_qr"
+        android:layout_width="400dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
+        android:contentDescription="@string/title_VR"
+        android:src="@drawable/appicon" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:layout_below="@+id/imageView_qr">
+
+
+        <TextView
+            android:id="@+id/qr_name_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Name"
+            android:maxLength="19"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="35sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/qr_score_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/qr_result_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Result"
+            android:maxLength="19"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="35sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+            android:id="@+id/qr_score_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="1000"
+            android:maxLength="19"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="35sp"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@+id/qr_name_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/qr_comment"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_above="@id/back_button"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"
+        android:autofillHints="name"
+        android:hint="Comment" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:drawableStart="@android:drawable/ic_menu_revert"
+        android:drawablePadding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="60dp"
+        android:text="Back" />
+
+
+</RelativeLayout>
