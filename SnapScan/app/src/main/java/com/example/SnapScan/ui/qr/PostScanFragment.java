@@ -75,7 +75,7 @@ public class    PostScanFragment extends Fragment {
         }
         // Receive the result from ScanQRFragment
         getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
-            String data = result.getString("Scanned Data");
+            String data = result.getString("Scanned Result");
             scannedQrCode = new QRcode(data);
             
             //TODO: Check if the QR code is already in the database and set view accordingly
