@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import static android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
 import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
 import static com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
+import static com.example.SnapScan.ui.profile.QRListFragment.userQrList;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,7 +43,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -77,8 +77,9 @@ public class    PostScanFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
             String data = result.getString("Scanned Data");
             scannedQrCode = new QRcode(data);
+            
             //TODO: Check if the QR code is already in the database and set view accordingly
-
+            
             //Loading the image into the ImageView
             ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
             scannedQrCode.loadImage(qr_visual);
@@ -150,11 +151,10 @@ public class    PostScanFragment extends Fragment {
                                         Log.d(TAG, "Document with same Hash does not exist in Firebase, Adding to Firebase");
                                         addQRToFirebase(QRHash);
                                     }
-                                    // Add the QR code to the user's collection
-
                                     // Get the comment from the user
                                     EditText comment = root.findViewById(R.id.editText_qr_comment);
 
+                                    // Add the QR code to the user's collection
                                     addToUserCollection(comment.getText().toString(), QRHash);
                                     updatePlayerTotals();
                                     //Player player = new Player(uname, scannedQrCode.getPoints());
@@ -209,13 +209,13 @@ public class    PostScanFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added successfully!");
+                        Log.d(TAG, "Data has been added successfully to the Database!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e);
+                        Log.d(TAG, "Data could not be added to the firebase!" + e);
                     }
                 });
 
@@ -234,21 +234,24 @@ public class    PostScanFragment extends Fragment {
         HashMap<String, Object> userComment = new HashMap<>();
         userComment.put("Comment", comment);
         // Make the change here after to do is done
+        
+        // TODO: double check
         collectionReference.document(uname).collection("Scanned QRs").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added successfully!");
+                        Log.d(TAG, "QR code has been added to the user's collection!");
+                        userQrList.add(scannedQrCode);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e);
+                        Log.d(TAG, "Data could not be added to the user collection!" + e);
                     }
                 });
     }
-
+    
     public void updatePlayerTotals() {
 
         db = FirebaseFirestore.getInstance();

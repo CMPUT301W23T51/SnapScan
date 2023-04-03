@@ -45,7 +45,8 @@ public class QRcode {
     //Empty constructor for Firebase
     public QRcode() {
     }
-    // Public Setters Created for Firebase
+
+    // Public Setter for Firebase
 
     public String getImageURL() {
         return imageURL;
@@ -192,3 +193,4 @@ public class QRcode {
         this.result = result;
     }
 }
+

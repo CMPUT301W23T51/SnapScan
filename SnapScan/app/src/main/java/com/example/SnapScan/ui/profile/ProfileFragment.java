@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,8 +16,10 @@ import com.example.SnapScan.R;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.databinding.FragmentProfileBinding;
-import com.example.SnapScan.ui.login.LoginActivity;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 /**
 
  A fragment to display user profile information, including a button to navigate to the user's list of QR codes
@@ -24,33 +27,25 @@ import com.google.firebase.auth.FirebaseAuth;
  and a button to open the leaderboard.
  */
 
+
 public class ProfileFragment extends Fragment {
 
     public static String username;
 
     private FragmentProfileBinding binding;
-    /**
-
-     Inflates the fragment's layout, sets up button click listeners, and returns the root view.
-
-     @param inflater The LayoutInflater object that can be used to inflate any views in the fragment
-
-     @param container The parent view that the fragment UI should be attached to
-
-     @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here
-
-     @return The root view of the fragment's layout
-     */
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        TextView player_qrCount = binding.qrCountInt;
+        TextView player_totalPoints = binding.totalPointsInt;
 
         // Open the QRListFragment when the button is clicked
         Button MyQrsButton = binding.myQrButton;
         MyQrsButton.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, new QRListFragment());
             // Allow use to go back to profile when back button is pressed
