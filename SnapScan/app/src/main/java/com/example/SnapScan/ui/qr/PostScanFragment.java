@@ -75,7 +75,7 @@ public class PostScanFragment extends Fragment {
             String data = result.getString("Scanned Result");
             scannedQrCode = new QRcode(data);
 
-            // Check if the QR code is already in the database
+            // Check if the QR code is already in the database and display the result
             doesQRcodeExist(scannedQrCode.getHash());
         });
 

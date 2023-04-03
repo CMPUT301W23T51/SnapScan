@@ -193,6 +193,8 @@ public class QRcode implements Comparable<QRcode>{
         this.result = result;
     }
 
+    // Defining the compareTo method to sort the QR codes based on the points
+    // Descending order
     @Override
     public int compareTo(QRcode qRcode) {
         return qRcode.getPoints() - this.getPoints();
