@@ -2,6 +2,7 @@ package com.example.SnapScan.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,26 +16,20 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.R;
 import com.example.SnapScan.databinding.FragmentProfileBinding;
-import com.google.firebase.firestore.FirebaseFirestore;
+
 
 /**
- * A fragment to display user profile information, including a button to navigate to the user's list of QR codes
- * and a button to open the leaderboard.
- *
+ * The ProfileFragment class is the fragment that is displayed when the user clicks on the profile
+ * it displays the username and the number of QR codes the user has scanned and the number of
+ * points the user has. The user can also click on the button to view their QR codes and the
+ * leaderboard button to view the leaderboard.
  */
-
-
 public class ProfileFragment extends Fragment {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FragmentProfileBinding binding;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        TextView player_qrCount = binding.qrCountInt;
-        TextView player_totalPoints = binding.totalPointsInt;
-
         // Open the QRListFragment when the button is clicked
         Button MyQrsButton = binding.myQrButton;
         MyQrsButton.setOnClickListener(v -> {
@@ -55,10 +50,8 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         return binding.getRoot();
     }
-
 
     @Override
     public void onDestroyView() {
@@ -66,4 +59,8 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }

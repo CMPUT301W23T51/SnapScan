@@ -24,10 +24,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
 import java.util.ArrayList;
 
-
+/**
+ * This fragment is used to display the list of QR codes
+ * scanned. it displays the QR code image, the name of the QR code,
+ * the result of the QR code.
+ * It also allows the user to swipe left to delete the QR code.
+ * with a snack-bar to undo the deletion.
+ * It also allows the user to click on the QR code to view the
+ * individual QR code in full screen.
+ */
 public class QRListFragment extends Fragment {
     public static ArrayList<QRcode> userQrList = new ArrayList<>();
     public static boolean dataLoaded;
@@ -102,7 +109,6 @@ public class QRListFragment extends Fragment {
             }
 
 
-
             /**
              * This method is called when the user swipes an QR code , it removes the QR code from the list
              * and the database
@@ -120,20 +126,22 @@ public class QRListFragment extends Fragment {
 
                 // Notify the adapter that the item was removed
                 mRecyclerView.getAdapter().notifyItemRemoved(position);
+
+                // Make a snack bar to undo the deletion
                 Snackbar undoOption = Snackbar.make(mRecyclerView, "QR code " + qrCode.getName() + " Deleted", Snackbar.LENGTH_LONG);
                 undoOption
                         .setTextColor(getResources().getColor(R.color.ComplementaryBlueLight))
                         .setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // Add the QR code back to the list
+                                // Add the QR code back to the list on undo
                                 userQrList.add(position, qrCode);
                                 // Notify the adapter that the item was added
                                 mRecyclerView.getAdapter().notifyItemInserted(position);
                             }
                         }).show();
 
-                // Delete the QR code from the database
+                // Delete the QR code from the database when the snack bar is dismissed
                 undoOption.addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {

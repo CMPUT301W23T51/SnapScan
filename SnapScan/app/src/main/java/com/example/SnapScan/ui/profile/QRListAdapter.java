@@ -19,6 +19,10 @@ import com.example.SnapScan.model.QRcode;
 
 import java.util.ArrayList;
 
+/**
+ * The QRListAdapter class is the adapter for the QRListFragment. It is used to display the QR codes
+ * that the user has scanned in a list.
+ */
 public class QRListAdapter extends RecyclerView.Adapter<QRListAdapter.QRListViewHolder> {
     public ArrayList<QRcode> qrCodes;
 

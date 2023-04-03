@@ -26,6 +26,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This fragment is used to display the individual QR code
+ * when the user clicks on a QR code in the QRListFragment.
+ * It displays the QR code image, the name of the QR code,
+ * the result of the QR code, and the points of the QR code.
+ * if a user has commented on the QR code, it will also display
+ * the comment.
+ */
 public class IndividualQRFragment extends Fragment {
     FirebaseFirestore db;
     private String qrHash;
@@ -44,8 +52,6 @@ public class IndividualQRFragment extends Fragment {
             progressBar.setVisibility(View.INVISIBLE);
 
         });
-        //Creating test QR hash
-//        qrHash = "001f189d1b61ba8790d1736e297550e779ab9183033d38628c551406ab8a8ee2";
         Button back_button = view.findViewById(R.id.back_button);
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override

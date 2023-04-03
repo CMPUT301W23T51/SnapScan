@@ -40,6 +40,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -61,6 +63,7 @@ public class PostScanFragment extends Fragment {
     QRcode scannedQrCode;
     String QRHash;
     FirebaseFirestore db;
+    private boolean qrExists = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -92,10 +95,9 @@ public class PostScanFragment extends Fragment {
 
         // Geolocation Button to add the location of the QR code
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
-        Button addGeoButton = root.findViewById(R.id.geolocation_button);
-        addGeoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        SwitchMaterial addLocationButton = root.findViewById(R.id.location_switch);
+        addLocationButton.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
                 if (ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
                     CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                     fusedLocationProviderClient.getCurrentLocation(PRIORITY_HIGH_ACCURACY, cancellationTokenSource.getToken())
@@ -118,36 +120,20 @@ public class PostScanFragment extends Fragment {
             }
         });
 
+
         // Save Button to save the QR code to the database
         Button saveButton = root.findViewById(R.id.save_qr_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db = FirebaseFirestore.getInstance();
-                // Check if the QR code already exists in the database
-                db.collection("QR").document(QRHash).get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (!document.exists()) {
-                                        // if Document does not exist add the QR code to the database
-                                        Log.d(TAG, "Document with same Hash does not exist in Firebase, Adding to Firebase");
-                                        addQRToFirebase(QRHash);
-                                    }
-                                    // Get the comment from the user
-                                    EditText comment = root.findViewById(R.id.editText_qr_comment);
+                if (!qrExists){
+                    addQRToFirebase(QRHash);
+                }
+                // Add the QR code to the user's collection
+                EditText comment = root.findViewById(R.id.editText_qr_comment);
 
-                                    // Add the QR code to the user's collection
-                                    addToUserCollection(comment.getText().toString(), QRHash);
-                                    updatePlayerTotals();
-
-                                } else {
-                                    Log.d(TAG, "Error getting document: ", task.getException());
-                                }
-                            }
-                        });
+                addToUserCollection(comment.getText().toString(), QRHash);
+                updatePlayerTotals();
 
                 // Go back to Profile fragment to signify completion of QR scan
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
@@ -159,10 +145,12 @@ public class PostScanFragment extends Fragment {
 
         return root;
     }
+
     /**
      * This method checks if the QR code already exists in the database
      * and sets the scannedQrCode variable to the QR code from the database
      * and sets up the views to display the data according to the QR code on the database
+     *
      * @param hash scanned QR code's hash which is used to check
      *             if the QR code already exists in the database
      */
@@ -171,43 +159,44 @@ public class PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         db.collection("QR").document(hash).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    Log.d(TAG, "Document with same Hash exists in Firebase");
-                    scannedQrCode = documentSnapshot.toObject(QRcode.class);
-                    // Display Alert Dialog to tell user that the QR code already exists in the database
-                    displayDialog(1);
-                } else {
-                    Log.d(TAG, "Document with same Hash does not exist in Firebase");
-                    // Display Alert Dialog to tell user that the QR code does not exist in the database
-                    displayDialog(0);
-                }
-            }
-        }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isComplete()) {
-                    View root = getView();
-                    //Setting up the  views to display the data
-                    TextView QR_score = root.findViewById(R.id.qr_score_text);
-                    TextView QR_name = root.findViewById(R.id.qr_name_text);
-                    TextView QR_result = root.findViewById(R.id.qr_result_text);
-                    QR_score.setText(String.valueOf(scannedQrCode.getPoints()));
-                    QR_name.setText(scannedQrCode.getName());
-                    QRHash = scannedQrCode.getHash();
-                    QR_result.setText(scannedQrCode.getResult());
-
-                    //Loading the image into the ImageView
-                    ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
-                    scannedQrCode.loadImage(qr_visual);
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Log.d(TAG, "Document with same Hash exists in Firebase");
+                            scannedQrCode = documentSnapshot.toObject(QRcode.class);
+                            // Display Alert Dialog to tell user that the QR code already exists in the database
+                            displayDialog(1);
+                        } else {
+                            Log.d(TAG, "Document with same Hash does not exist in Firebase");
+                            // Display Alert Dialog to tell user that the QR code does not exist in the database
+                            displayDialog(0);
+                        }
                     }
-                }
-            });
+                }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isComplete()) {
+                            View root = getView();
+                            //Setting up the  views to display the data
+                            TextView QR_score = root.findViewById(R.id.qr_score_text);
+                            TextView QR_name = root.findViewById(R.id.qr_name_text);
+                            TextView QR_result = root.findViewById(R.id.qr_result_text);
+                            QR_score.setText(String.valueOf(scannedQrCode.getPoints()));
+                            QR_name.setText(scannedQrCode.getName());
+                            QRHash = scannedQrCode.getHash();
+                            QR_result.setText(scannedQrCode.getResult());
+
+                            //Loading the image into the ImageView
+                            ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
+                            scannedQrCode.loadImage(qr_visual);
+                        }
+                    }
+                });
     }
 
     /**
      * This method makes an Alert Dialog to notify the user if the QR code already exists in the database
+     *
      * @param option 0 for new QR code, 1 for existing QR code
      */
     private void displayDialog(int option) {
@@ -219,6 +208,7 @@ public class PostScanFragment extends Fragment {
         } else if (option == 1) {
             builder.setTitle("DEJA VU");
             builder.setMessage("Looks like it's a PRETTY POPULAR QR!");
+            qrExists = true;
         }
         // Add a button to dismiss the dialog
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -271,7 +261,6 @@ public class PostScanFragment extends Fragment {
                 });
 
     }
-    //TODO: update function to take user information as a parameter
 
     /**
      * This method adds a QR code to the user's collection with a comment
@@ -302,6 +291,9 @@ public class PostScanFragment extends Fragment {
                 });
     }
 
+    /**
+     * This method updates the user's total points and the number of QR codes they have scanned
+     */
     public void updatePlayerTotals() {
 
         db = FirebaseFirestore.getInstance();
