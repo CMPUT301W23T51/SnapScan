@@ -2,6 +2,7 @@ package com.example.SnapScan.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +16,20 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.R;
 import com.example.SnapScan.databinding.FragmentProfileBinding;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A fragment to display user profile information, including a button to navigate to the user's list of QR codes
  * and a button to open the leaderboard.
- *
  */
 
 
 public class ProfileFragment extends Fragment {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FragmentProfileBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        TextView player_qrCount = binding.qrCountInt;
-        TextView player_totalPoints = binding.totalPointsInt;
 
         // Open the QRListFragment when the button is clicked
         Button MyQrsButton = binding.myQrButton;
@@ -58,7 +54,6 @@ public class ProfileFragment extends Fragment {
 
         return binding.getRoot();
     }
-
 
     @Override
     public void onDestroyView() {

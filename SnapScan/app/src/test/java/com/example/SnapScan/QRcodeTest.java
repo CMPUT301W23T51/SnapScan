@@ -1,6 +1,7 @@
 package com.example.SnapScan;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.SnapScan.model.QRcode;
@@ -110,6 +111,7 @@ public class QRcodeTest {
         QRcode qrcode1 = new QRcode("test");
         QRcode qrcode2 = new QRcode("test");
         Assertions.assertEquals(0, qrcode1.compareTo(qrcode2));
+        // Group member QR code should be the first one
         qrcodes.add(new QRcode("Suvan"));
         qrcodes.add(new QRcode());
         qrcodes.add(qrcode1);
@@ -119,5 +121,7 @@ public class QRcodeTest {
         for (int i = 0; i < qrcodes.size() - 1; i++) {
             assertTrue(qrcodes.get(i).getPoints() >= qrcodes.get(i + 1).getPoints());
         }
+        // Check if the QR code with the highest points is the first one
+        assertSame("Suvan", qrcodes.get(0).getResult());
     }
 }

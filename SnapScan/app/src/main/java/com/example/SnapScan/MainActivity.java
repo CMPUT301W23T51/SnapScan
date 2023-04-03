@@ -1,7 +1,6 @@
 package com.example.SnapScan;
 
 import static android.content.ContentValues.TAG;
-
 import static com.example.SnapScan.ui.profile.QRListFragment.dataLoaded;
 import static com.example.SnapScan.ui.profile.QRListFragment.userQrList;
 
@@ -17,7 +16,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.SnapScan.databinding.ActivityMainBinding;
-
 import com.example.SnapScan.model.QRcode;
 import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,8 +34,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static String USER_ID;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ActivityMainBinding binding;
 
     @Override
@@ -86,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         // Log the Success
-                        Log.d(TAG, "Successfully retrieved the list of QR codes that the user has scanned");
+                        Log.d(TAG, "Successfully retrieved the list of QR Hashes that the user has scanned");
                         // Get the list of qr codes that the user has scanned
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             qrHashList.add(document.getId());
@@ -118,13 +116,17 @@ public class MainActivity extends AppCompatActivity {
                     QRcode qrCode = documentSnapshot.toObject(QRcode.class);
                     userQrList.add(qrCode);
                     Log.d(TAG, "Successfully added QR code to the list");
+                    // Set the dataLoaded to true so that the QRListFragment can display the list
                     dataLoaded = true;
+                    // Sort the list of qr codes to get the highest and lowest Scoring QR codes
+                    userQrList.sort(QRcode::compareTo);
                 }
             });
         }
+
     }
 
-    private void getUser(){
+    private void getUser() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         CollectionReference collectionRef = db.collection("users");
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onStart() {
         super.onStart();

@@ -44,8 +44,6 @@ public class IndividualQRFragment extends Fragment {
             progressBar.setVisibility(View.INVISIBLE);
 
         });
-        //Creating test QR hash
-//        qrHash = "001f189d1b61ba8790d1736e297550e779ab9183033d38628c551406ab8a8ee2";
         Button back_button = view.findViewById(R.id.back_button);
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
