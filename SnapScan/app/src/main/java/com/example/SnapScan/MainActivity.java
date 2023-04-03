@@ -17,7 +17,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.SnapScan.databinding.ActivityMainBinding;
 import com.example.SnapScan.model.QRcode;
-import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
