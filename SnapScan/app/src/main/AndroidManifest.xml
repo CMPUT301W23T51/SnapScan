@@ -26,9 +26,13 @@
 
         <activity
             android:name=".ui.profile.OtherProfile"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Player Profile"/>
 
         <activity
+            android:name=".ui.profile.leaderboard"
+            android:exported="false"
+            android:label="Leaderboard"/>
             android:name=".ui.profile.Leaderboard"
             android:exported="false" />
 
