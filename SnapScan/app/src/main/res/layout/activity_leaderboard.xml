@@ -32,18 +32,6 @@
         app:layout_constraintTop_toBottomOf="@+id/search_edit_text" />
 
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/search_button"-->
-<!--        android:layout_width="66dp"-->
-<!--        android:layout_height="46dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:background="@color/AnalogousRed"-->
-<!--        android:contentDescription="Search"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:srcCompat="@android:drawable/ic_menu_search" />-->
-
 
     <Button
         android:id="@+id/search_button"
@@ -58,13 +46,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--<Button-->
-<!--android:id="@+id/search_button"-->
-<!--android:layout_width="wrap_content"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:layout_marginTop="16dp"-->
-<!--android:background="@color/AnalogousRed"-->
-<!--android:text="Search"-->
-<!--app:layout_constraintEnd_toEndOf="parent"-->
-<!--app:layout_constraintTop_toTopOf="parent" />-->
