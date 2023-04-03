@@ -1,24 +1,18 @@
 package com.example.SnapScan.ui.profile;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
-
-import com.example.SnapScan.ui.profile.Score;
 
 import com.example.SnapScan.R;
 import com.example.SnapScan.model.ScoreAdapter;
@@ -42,7 +36,7 @@ import java.util.List;
 
  */
 
-public class leaderboard extends Activity implements SearchView.OnQueryTextListener {
+public class Leaderboard extends Activity implements SearchView.OnQueryTextListener {
     private static final String TAG = "Leaderboard";
     private RecyclerView mRecyclerView;
     private ScoreAdapter mAdapter;
@@ -73,7 +67,7 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
             @Override
             public void onItemClick(int position) {
                 String playerName = mScoresList.get(position).getName();
-                Intent intent = new Intent(leaderboard.this, OtherProfile.class);
+                Intent intent = new Intent(Leaderboard.this, OtherProfile.class);
                 intent.putExtra("username", playerName);
                 startActivity(intent);
             }

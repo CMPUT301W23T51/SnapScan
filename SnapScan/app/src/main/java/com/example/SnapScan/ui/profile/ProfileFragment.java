@@ -16,9 +16,6 @@ import com.example.SnapScan.R;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.SnapScan.databinding.FragmentProfileBinding;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 /**
 
@@ -58,7 +55,7 @@ public class ProfileFragment extends Fragment {
         Leaderboard_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),leaderboard.class);
+                Intent intent = new Intent(getContext(), Leaderboard.class);
                 startActivity(intent);
             }
         });
