@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.SnapScan.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -62,9 +61,9 @@ public class QRScanFragment extends Fragment {
                 barcodeScannerView.setStatusText(result.getText());
                 barcodeScannerView.pause();
 
-                // Replace the current fragment with the PostScanFragment
+                // Replace the current fragment with the PostScanFragment and pass the scanned QR
                 Bundle data = new Bundle();
-                data.putString("Scanned Data", result.getText());
+                data.putString("Scanned Result", result.getText());
                 getParentFragmentManager().setFragmentResult("dataFromQR", data);
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -88,6 +87,8 @@ public class QRScanFragment extends Fragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         } else {
             capture.onResume();
+            bottomNav.setVisibility(View.INVISIBLE);
+
         }
     }
 
@@ -95,12 +96,15 @@ public class QRScanFragment extends Fragment {
     public void onPause() {
         super.onPause();
         capture.onPause();
+        bottomNav.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         capture.onDestroy();
+        bottomNav.setVisibility(View.VISIBLE);
+
     }
 
     @Override
