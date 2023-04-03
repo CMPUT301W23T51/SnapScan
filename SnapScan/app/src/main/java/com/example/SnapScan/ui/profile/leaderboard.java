@@ -80,9 +80,9 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
         });
         mRecyclerView.setAdapter(mAdapter);
 
-//         Retrieve scores data from Firestore and rank in ascending order
+//         Retrieve scores data from Firestore and rank in descending order
         db.collection("users")
-                .orderBy("TotalPoints", Query.Direction.ASCENDING) // Sort by "points" field in ascending order
+                .orderBy("TotalPoints", Query.Direction.DESCENDING) // Sort by "points" field in descending order
                 .get() // Get the query results
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -99,7 +99,7 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
                             Collections.sort(mScoresList, new Comparator<Score>() {
                                 @Override
                                 public int compare(Score score1, Score score2) {
-                                    return (int) (score1.getPoints() - score2.getPoints());
+                                    return (int) (score2.getPoints() - score1.getPoints());
                                 }
                             });
                             mAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
@@ -119,7 +119,7 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
                 // Get the search query from the EditText
                 String searchQuery = searchEditText.getText().toString().trim();
                 // Query the Firestore collection for documents where the "Name" field matches the search query
-                db.collection("QR")
+                db.collection("users")
                         .whereEqualTo("name", searchQuery)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

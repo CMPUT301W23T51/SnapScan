@@ -19,13 +19,16 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.SnapScan.databinding.ActivityMainBinding;
 
 import com.example.SnapScan.model.QRcode;
+import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -33,7 +36,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseFirestore db;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ActivityMainBinding binding;
 
     @Override
@@ -79,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
         String user = "suvan5@gmail.com";
 
         // Get a Fire store instance
-        db = FirebaseFirestore.getInstance();
         ArrayList<String> qrHashList = new ArrayList<>();
         CollectionReference collectionReference = db.collection("users").document(user).collection("Scanned QRs");
         collectionReference.get()
@@ -123,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
     private void getUser(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         CollectionReference collectionRef = db.collection("users");
