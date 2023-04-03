@@ -56,19 +56,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // Trying to implement the logout button
-        /*
-        Button logout = binding.getRoot().findViewById(R.id.logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent login_intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(login_intent);
-            }
-        });
-
-         */
-
         return binding.getRoot();
     }
 

@@ -72,7 +72,7 @@ public class PostScanFragment extends Fragment {
         }
         // Receive the result from ScanQRFragment
         getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
-            String data = result.getString("Scanned Data");
+            String data = result.getString("Scanned Result");
             scannedQrCode = new QRcode(data);
 
             //TODO: Check if the QR code is already in the database and set view accordingly
@@ -195,14 +195,7 @@ public class PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the QR Object to the database
-        HashMap<String, Object> qrData = new HashMap<>();
-        qrData.put("name", scannedQrCode.getName());
-        qrData.put("points", scannedQrCode.getPoints());
-        qrData.put("result", scannedQrCode.getResult());
-        qrData.put("hash", scannedQrCode.getHash());
-        qrData.put("imageURL", scannedQrCode.getImageURL());
-        qrData.put("geoPoint", scannedQrCode.getGeoPoint());
-        collectionReference.document(documentName).set(qrData)
+        collectionReference.document(documentName).set(scannedQrCode)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
