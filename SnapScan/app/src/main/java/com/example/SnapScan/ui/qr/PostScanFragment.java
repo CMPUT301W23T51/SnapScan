@@ -8,6 +8,8 @@ import static com.example.SnapScan.MainActivity.USER_ID;
 import static com.example.SnapScan.ui.profile.QRListFragment.userQrList;
 import static com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -174,8 +176,12 @@ public class PostScanFragment extends Fragment {
                 if (documentSnapshot.exists()) {
                     Log.d(TAG, "Document with same Hash exists in Firebase");
                     scannedQrCode = documentSnapshot.toObject(QRcode.class);
+                    // Display Alert Dialog to tell user that the QR code already exists in the database
+                    displayDialog(1);
                 } else {
                     Log.d(TAG, "Document with same Hash does not exist in Firebase");
+                    // Display Alert Dialog to tell user that the QR code does not exist in the database
+                    displayDialog(0);
                 }
             }
         }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -198,6 +204,35 @@ public class PostScanFragment extends Fragment {
                     }
                 }
             });
+    }
+
+    /**
+     * This method makes an Alert Dialog to notify the user if the QR code already exists in the database
+     * @param option 0 for new QR code, 1 for existing QR code
+     */
+    private void displayDialog(int option) {
+        // Build the alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        if (option == 0) {
+            builder.setTitle("And Another One!");
+            builder.setMessage("The QR code you scanned is officially Fresh");
+        } else if (option == 1) {
+            builder.setTitle("DEJA VU");
+            builder.setMessage("Looks like it's a PRETTY POPULAR QR!");
+        }
+        // Add a button to dismiss the dialog
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do something when the user clicks "OK"
+                dialog.dismiss();
+            }
+        });
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     @Override
