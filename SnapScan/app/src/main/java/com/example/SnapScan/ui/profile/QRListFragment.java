@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.util.ArrayList;
 
 
@@ -38,28 +39,29 @@ public class QRListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_player_qr_list, container, false);
         mRecyclerView = view.findViewById(R.id.recyclerView_qr_list);
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.GONE);
         mRecyclerView.setHasFixedSize(true);
 
         // How to hide the bottom navigation bar when scrolling
         // https://stackoverflow.com/questions/44777869/hide-show-bottomnavigationview-on-scroll
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                // hide the bottom navigation bar when scrolling
-                if ((dy != 0) && bottomNavigationView.isShown()) {
-                    bottomNavigationView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    // set the bottom navigation bar to visible after scrolling has stopped
-                    // Display the bottom navigation bar when scrolling has stopped
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                // hide the bottom navigation bar when scrolling
+//                if ((dy != 0) && bottomNavigationView.isShown()) {
+//                    bottomNavigationView.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+//                    // set the bottom navigation bar to visible after scrolling has stopped
+//                    // Display the bottom navigation bar when scrolling has stopped
+//                    bottomNavigationView.setVisibility(View.VISIBLE);
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//        });
         ProgressBar progressBar = view.findViewById(R.id.progressBar_qr_list);
         if (dataLoaded) {
             QRListAdapter qrListAdapter = new QRListAdapter(userQrList);
@@ -147,6 +149,8 @@ public class QRListFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        // Display the bottom navigation bar when the fragment is destroyed
+        bottomNavigationView.setVisibility(View.VISIBLE);
         super.onDestroyView();
     }
 

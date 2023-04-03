@@ -1,29 +1,26 @@
 package com.example.SnapScan.ui.profile;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 
-import com.example.SnapScan.ui.profile.Score;
-
 import com.example.SnapScan.R;
 import com.example.SnapScan.model.ScoreAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,7 +39,7 @@ import java.util.List;
 
  */
 
-public class leaderboard extends Activity implements SearchView.OnQueryTextListener {
+public class Leaderboard extends Activity implements SearchView.OnQueryTextListener {
     private static final String TAG = "Leaderboard";
     private RecyclerView mRecyclerView;
     private ScoreAdapter mAdapter;
@@ -73,7 +70,7 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
             @Override
             public void onItemClick(int position) {
                 String playerName = mScoresList.get(position).getName();
-                Intent intent = new Intent(leaderboard.this, OtherProfile.class);
+                Intent intent = new Intent(Leaderboard.this, OtherProfile.class);
                 intent.putExtra("username", playerName);
                 startActivity(intent);
             }
@@ -156,22 +153,6 @@ public class leaderboard extends Activity implements SearchView.OnQueryTextListe
         });
 
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_leaderboard, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setOnQueryTextListener(this);
-
-        return true;
-    }
-*/
     /**
 
      Called when the user submits the search query.

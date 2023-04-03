@@ -11,29 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import com.example.SnapScan.R;
-
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.SnapScan.R;
 import com.example.SnapScan.databinding.FragmentProfileBinding;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 /**
-
- A fragment to display user profile information, including a button to navigate to the user's list of QR codes
-
- and a button to open the leaderboard.
+ * A fragment to display user profile information, including a button to navigate to the user's list of QR codes
+ * and a button to open the leaderboard.
+ *
  */
 
 
 public class ProfileFragment extends Fragment {
-
-    public static String username;
-
-    private FragmentProfileBinding binding;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FragmentProfileBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -58,23 +51,10 @@ public class ProfileFragment extends Fragment {
         Leaderboard_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),leaderboard.class);
+                Intent intent = new Intent(getContext(), Leaderboard.class);
                 startActivity(intent);
             }
         });
-
-        // Trying to implement the logout button
-        /*
-        Button logout = binding.getRoot().findViewById(R.id.logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent login_intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(login_intent);
-            }
-        });
-
-         */
 
         return binding.getRoot();
     }

@@ -1,16 +1,10 @@
 package com.example.SnapScan.ui.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceGroup;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
@@ -20,28 +14,28 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import com.example.SnapScan.MainActivity;
 import com.example.SnapScan.R;
-import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import java.util.regex.Pattern;
 /**
-
- The LoginActivity class is responsible for handling the login functionality of the application.
-
- It contains the methods for handling user login, forgot password functionality, and redirecting the user to the registration activity.
-
- It also initializes the UI components and sets click listeners for the login and register buttons.
+ * The LoginActivity class is responsible for handling the login functionality of the application.
+ * <p>
+ * It contains the methods for handling user login, forgot password functionality, and redirecting the user to the registration activity.
+ * <p>
+ * It also initializes the UI components and sets click listeners for the login and register buttons.
  */
 
 public class LoginActivity extends Activity {
+    public String username; // trying to pass it to main activity class
     /**
      * editTextLoginEmail is an EditText field that allows users to enter their email address during login.
      * editTextLoginPassword is an EditText field that allows users to enter their password during login.
@@ -54,14 +48,12 @@ public class LoginActivity extends Activity {
     private ProgressBar progressBar;
     private TextView forgotPassword;
 
-    public String username; // trying to pass it to main activity class
     /**
-
-     The onCreate() method is called when the activity is first created.
-
-     It initializes the UI components and sets click listeners for the login and register buttons.
-
-     @param savedInstanceState A Bundle object containing the activity's previously saved state.
+     * The onCreate() method is called when the activity is first created.
+     * <p>
+     * It initializes the UI components and sets click listeners for the login and register buttons.
+     *
+     * @param savedInstanceState A Bundle object containing the activity's previously saved state.
      */
 
     @SuppressLint("MissingInflatedId")
@@ -157,7 +149,7 @@ public class LoginActivity extends Activity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginActivity.this, "SomeThing went Wrong"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "SomeThing went Wrong" + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                             }
                         });
@@ -174,15 +166,14 @@ public class LoginActivity extends Activity {
             }
         });
     }
+
     /**
-
-     This method is used to log in a user. It uses the Firebase authentication to sign in the user with the provided email
-
-     and password. If the login is successful, the user is redirected to the main activity. Otherwise, an error message is displayed.
-
-     @param Email The user's email address
-
-     @param Password The user's password
+     * This method is used to log in a user. It uses the Firebase authentication to sign in the user with the provided email
+     * <p>
+     * and password. If the login is successful, the user is redirected to the main activity. Otherwise, an error message is displayed.
+     *
+     * @param Email    The user's email address
+     * @param Password The user's password
      */
 
 
@@ -205,7 +196,7 @@ public class LoginActivity extends Activity {
 
                     // pass username to profile
                     username = editTextLoginEmail.getText().toString();
-                    ProfileFragment.username = username;
+                    MainActivity.USER_ID = username;
 
                     finish();
 
@@ -221,33 +212,32 @@ public class LoginActivity extends Activity {
         });
 
     }
+
     /**
-
-     This method is called when the activity is starting. It checks if the user is already logged in and redirects them to the main activity.
-
-     If the user is not logged in, a message is displayed prompting the user to log in.
+     * This method is called when the activity is starting. It checks if the user is already logged in and redirects them to the main activity.
+     * If the user is not logged in, a message is displayed prompting the user to log in.
      */
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (firebaseAuth.getCurrentUser() != null){
-            Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+        // checking if the user is already logged in , if yes then redirect to main activity
+        if (firebaseAuth.getCurrentUser() != null) {
 
             // pass username to profile
             username = editTextLoginEmail.getText().toString();
-            ProfileFragment.username = username;
-
+            MainActivity.USER_ID = username;
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
 
         }
-        else {
-            Toast.makeText(this, "Need to login!", Toast.LENGTH_SHORT).show();
-        }
-
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
 
 
 }

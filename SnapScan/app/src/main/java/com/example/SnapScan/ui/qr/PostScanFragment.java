@@ -4,8 +4,9 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.ContentValues.TAG;
 import static android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
 import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
-import static com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
+import static com.example.SnapScan.MainActivity.USER_ID;
 import static com.example.SnapScan.ui.profile.QRListFragment.userQrList;
+import static com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,7 +31,6 @@ import androidx.navigation.Navigation;
 
 import com.example.SnapScan.R;
 import com.example.SnapScan.model.QRcode;
-import com.example.SnapScan.ui.profile.ProfileFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationTokenSource;
@@ -52,10 +52,7 @@ import java.util.HashMap;
  * and saved the location of the QR code
  */
 
-public class    PostScanFragment extends Fragment {
-
-    public String uname = ProfileFragment.username;
-
+public class PostScanFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
     private final int CAMERA_REQUEST_CODE = 103;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -75,11 +72,11 @@ public class    PostScanFragment extends Fragment {
         }
         // Receive the result from ScanQRFragment
         getParentFragmentManager().setFragmentResultListener("dataFromQR", this, (requestKey, result) -> {
-            String data = result.getString("Scanned Data");
+            String data = result.getString("Scanned Result");
             scannedQrCode = new QRcode(data);
-            
+
             //TODO: Check if the QR code is already in the database and set view accordingly
-            
+
             //Loading the image into the ImageView
             ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
             scannedQrCode.loadImage(qr_visual);
@@ -198,14 +195,7 @@ public class    PostScanFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("QR");
         // Add the QR Object to the database
-        HashMap<String, Object> qrData = new HashMap<>();
-        qrData.put("name", scannedQrCode.getName());
-        qrData.put("points", scannedQrCode.getPoints());
-        qrData.put("result", scannedQrCode.getResult());
-        qrData.put("hash", scannedQrCode.getHash());
-        qrData.put("imageURL", scannedQrCode.getImageURL());
-        qrData.put("geoPoint", scannedQrCode.getGeoPoint());
-        collectionReference.document(documentName).set(qrData)
+        collectionReference.document(documentName).set(scannedQrCode)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -234,9 +224,9 @@ public class    PostScanFragment extends Fragment {
         HashMap<String, Object> userComment = new HashMap<>();
         userComment.put("Comment", comment);
         // Make the change here after to do is done
-        
+
         // TODO: double check
-        collectionReference.document(uname).collection("Scanned QRs").document(documentName).set(userComment)
+        collectionReference.document(USER_ID).collection("Scanned QRs").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -251,11 +241,11 @@ public class    PostScanFragment extends Fragment {
                     }
                 });
     }
-    
+
     public void updatePlayerTotals() {
 
         db = FirebaseFirestore.getInstance();
-        DocumentReference documentReference = db.collection("users").document(uname);
+        DocumentReference documentReference = db.collection("users").document(USER_ID);
 
         //final ApiFuture<WriteResult> updateFuture = documentReference.update("population", FieldValue.increment(50));
 

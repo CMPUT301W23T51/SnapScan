@@ -240,7 +240,7 @@ public class RegisterActivity extends Activity {
                                 });
 
                                 String username = textEmail;
-                                ProfileFragment.username = username;
+                                MainActivity.USER_ID = username;
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
