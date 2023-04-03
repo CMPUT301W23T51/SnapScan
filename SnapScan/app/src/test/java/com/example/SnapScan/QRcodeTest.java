@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 
 public class QRcodeTest {
 
@@ -21,6 +23,11 @@ public class QRcodeTest {
         qrcode = new QRcode("test");
     }
 
+    @AfterAll
+    static void tearDown() {
+        qrcode = null;
+    }
+
     // Test to check if the QR code name is generated correctly
     @Test
     public void fakerNameTest() {
@@ -28,6 +35,7 @@ public class QRcodeTest {
         String name = faker.ancient().god();
         assertTrue(name.length() > 0);
     }
+
     // Testing all setters and getters for Firebase
     @Test
     public void testSetters() {
@@ -80,6 +88,7 @@ public class QRcodeTest {
         System.out.println("Original: " + qrcode.getPoints());
 
     }
+
     // Test to check if the QR code image URL is generated correctly
     @Test
     public void testImageURL() {
@@ -94,8 +103,21 @@ public class QRcodeTest {
         Assertions.assertEquals("test", qrcode.getResult());
     }
 
-    @AfterAll
-    static void tearDown() {
-        qrcode = null;
+    // Test to check if compareTo method works correctly
+    @Test
+    public void testCompareTo() {
+        ArrayList<QRcode> qrcodes = new ArrayList<>();
+        QRcode qrcode1 = new QRcode("test");
+        QRcode qrcode2 = new QRcode("test");
+        Assertions.assertEquals(0, qrcode1.compareTo(qrcode2));
+        qrcodes.add(new QRcode("Suvan"));
+        qrcodes.add(new QRcode());
+        qrcodes.add(qrcode1);
+        qrcodes.add(qrcode2);
+        qrcodes.sort(QRcode::compareTo);
+        // Check if the QR codes are sorted correctly
+        for (int i = 0; i < qrcodes.size() - 1; i++) {
+            assertTrue(qrcodes.get(i).getPoints() >= qrcodes.get(i + 1).getPoints());
+        }
     }
 }

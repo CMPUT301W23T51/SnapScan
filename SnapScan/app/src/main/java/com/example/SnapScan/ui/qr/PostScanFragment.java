@@ -75,22 +75,8 @@ public class PostScanFragment extends Fragment {
             String data = result.getString("Scanned Result");
             scannedQrCode = new QRcode(data);
 
-            //TODO: Check if the QR code is already in the database and set view accordingly
-
-            //Loading the image into the ImageView
-            ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
-            scannedQrCode.loadImage(qr_visual);
-
-
-            //Setting up the  views to display the data
-            TextView QR_score = root.findViewById(R.id.qr_score_text);
-            TextView QR_name = root.findViewById(R.id.qr_name_text);
-            TextView QR_result = root.findViewById(R.id.qr_result_text);
-            QR_score.setText(String.valueOf(scannedQrCode.getPoints()));
-            QR_name.setText(scannedQrCode.getName());
-            QRHash = scannedQrCode.getHash();
-            QR_result.setText(scannedQrCode.getResult());
-
+            // Check if the QR code is already in the database
+            doesQRcodeExist(scannedQrCode.getHash());
         });
 
 
@@ -154,8 +140,6 @@ public class PostScanFragment extends Fragment {
                                     // Add the QR code to the user's collection
                                     addToUserCollection(comment.getText().toString(), QRHash);
                                     updatePlayerTotals();
-                                    //Player player = new Player(uname, scannedQrCode.getPoints());
-                                    //player.update();
 
                                 } else {
                                     Log.d(TAG, "Error getting document: ", task.getException());
@@ -172,6 +156,48 @@ public class PostScanFragment extends Fragment {
         });
 
         return root;
+    }
+    /**
+     * This method checks if the QR code already exists in the database
+     * and sets the scannedQrCode variable to the QR code from the database
+     * and sets up the views to display the data according to the QR code on the database
+     * @param hash scanned QR code's hash which is used to check
+     *             if the QR code already exists in the database
+     */
+
+    private void doesQRcodeExist(String hash) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("QR").document(hash).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Log.d(TAG, "Document with same Hash exists in Firebase");
+                    scannedQrCode = documentSnapshot.toObject(QRcode.class);
+                } else {
+                    Log.d(TAG, "Document with same Hash does not exist in Firebase");
+                }
+            }
+        }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isComplete()) {
+                    View root = getView();
+                    //Setting up the  views to display the data
+                    TextView QR_score = root.findViewById(R.id.qr_score_text);
+                    TextView QR_name = root.findViewById(R.id.qr_name_text);
+                    TextView QR_result = root.findViewById(R.id.qr_result_text);
+                    QR_score.setText(String.valueOf(scannedQrCode.getPoints()));
+                    QR_name.setText(scannedQrCode.getName());
+                    QRHash = scannedQrCode.getHash();
+                    QR_result.setText(scannedQrCode.getResult());
+
+                    //Loading the image into the ImageView
+                    ImageView qr_visual = root.findViewById(R.id.imageViewQrCode);
+                    scannedQrCode.loadImage(qr_visual);
+                    }
+                }
+            });
     }
 
     @Override
@@ -225,7 +251,6 @@ public class PostScanFragment extends Fragment {
         userComment.put("Comment", comment);
         // Make the change here after to do is done
 
-        // TODO: double check
         collectionReference.document(USER_ID).collection("Scanned QRs").document(documentName).set(userComment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -253,7 +278,7 @@ public class PostScanFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Count incremented successfully!");
+                        Log.d(TAG, "Count of user incremented successfully!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -267,7 +292,7 @@ public class PostScanFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Count incremented successfully!");
+                        Log.d(TAG, "Total Points of user incremented successfully!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

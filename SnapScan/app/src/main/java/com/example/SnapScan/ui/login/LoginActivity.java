@@ -223,10 +223,7 @@ public class LoginActivity extends Activity {
         super.onStart();
         // checking if the user is already logged in , if yes then redirect to main activity
         if (firebaseAuth.getCurrentUser() != null) {
-
-            // pass username to profile
-            username = editTextLoginEmail.getText().toString();
-            MainActivity.USER_ID = username;
+            MainActivity.USER_ID = firebaseAuth.getCurrentUser().getUid();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();

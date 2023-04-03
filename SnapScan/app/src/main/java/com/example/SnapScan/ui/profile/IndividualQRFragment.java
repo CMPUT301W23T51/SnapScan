@@ -41,7 +41,6 @@ public class IndividualQRFragment extends Fragment {
         // Receive the QR hash from the QRListFragment
         getParentFragmentManager().setFragmentResultListener("Hash", this, (requestKey, result) -> {
             qrHash = result.getString("QR Hash");
-            System.out.println("QR Hash to: " + qrHash);
             // Important to use DisplayQR line here, otherwise the QR code will not be displayed
             // as the hash is not received in time if it is called outside of this method
             displayQR(qrHash);

@@ -21,7 +21,7 @@ import java.util.Random;
 /**
  * Class to represent a QR codes
  */
-public class QRcode {
+public class QRcode implements Comparable<QRcode>{
 
     private String result;
     private String hash;
@@ -191,6 +191,11 @@ public class QRcode {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    @Override
+    public int compareTo(QRcode qRcode) {
+        return qRcode.getPoints() - this.getPoints();
     }
 }
 

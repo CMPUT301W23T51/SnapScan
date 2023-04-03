@@ -49,13 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getUser();
 
         // We are populating the qrList in the MainActivity as it reduces the loading time
         // of the QRListFragment
         // https://stackoverflow.com/questions/68023340/custom-object-retrieved-from-firebase-always-has-null-attributes
 
-        populateUserQRList();
+//        populateUserQRList();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -79,12 +78,9 @@ public class MainActivity extends AppCompatActivity {
      * * @helperMethod _addToQRList
      */
     public void populateUserQRList() {
-        //TODO: Change this to the user
-        String user = "suvan5@gmail.com";
-
         // Get a Fire store instance
         ArrayList<String> qrHashList = new ArrayList<>();
-        CollectionReference collectionReference = db.collection("users").document(user).collection("Scanned QRs");
+        CollectionReference collectionReference = db.collection("users").document(USER_ID).collection("Scanned QRs");
         collectionReference.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -141,10 +137,17 @@ public class MainActivity extends AppCompatActivity {
                     // Handle each document that matches the query
                     Log.d(TAG, document.getId());
                     USER_ID = document.getId();
+                    populateUserQRList();
                 }
             } else {
                 Log.d(TAG, "Error getting documents: ", task.getException());
             }
         });
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getUser();
+    }
+
 }
